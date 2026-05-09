@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rudus — OST-style Wireframe</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      color: #222;
+      overflow: hidden
+    }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh
+    }
+
+    /* ─────────────────────────────────────
+       1. Title bar
+    ────────────────────────────────────── */
+    #titlebar {
+      height: 44px;
+      min-height: 44px;
+      background: #444;
+      color: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      font-size: 13px;
+    }
+
+    #titlebar .left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #titlebar .brand {
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    #titlebar .project {
+      font-weight: 400;
+      color: #bbb;
+    }
+
+    #titlebar .right {
+      color: #999;
+      font-style: italic;
+      font-size: 12px;
+    }
+
+    /* 1. Menu bar */
+    #menubar {
+      height: 28px;
+      min-height: 28px;
+      background: #444;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      gap: 2px
+    }
+
+    #menubar span {
+      color: #ddd;
+      padding: 2px 8px;
+      cursor: pointer;
+      font-size: 12px
+    }
+
+    #menubar span:hover {
+      background: #555
+    }
+
+    /* 2. Toolbar row 1 */
+    .toolbar {
+      height: 32px;
+      min-height: 32px;
+      background: #888;
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+      gap: 2px;
+      border-bottom: 1px solid #777
+    }
+
+    .tb-btn {
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #7a7a7a;
+      border: 1px solid #666;
+      border-radius: 2px;
+      color: #eee;
+      cursor: pointer;
+      font-size: 0
+    }
+
+    .tb-btn i {
+      font-size: 16px
+    }
+
+    .tb-btn:hover {
+      background: #6a6a6a
+    }
+
+    .tb-btn.active {
+      background: #555;
+      border-color: #444
+    }
+
+    .tb-sep {
+      width: 1px;
+      height: 20px;
+      background: #666;
+      margin: 0 3px
+    }
+
+    .tb-dropdown {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      background: #7a7a7a;
+      border: 1px solid #666;
+      border-radius: 2px;
+      padding: 2px 8px;
+      color: #eee;
+      font-size: 11px;
+      cursor: pointer;
+      white-space: nowrap;
+      height: 26px
+    }
+
+    .tb-dropdown:hover {
+      background: #6a6a6a
+    }
+
+    .tb-dropdown i {
+      font-size: 12px
+    }
+
+    .tb-label {
+      color: #ddd;
+      font-size: 11px;
+      padding: 0 4px;
+      white-space: nowrap
+    }
+
+    .tb-spacer {
+      flex: 1
+    }
+
+    .tb-green {
+      background: #8a8a8a;
+      border: 1px solid #777;
+      border-radius: 2px;
+      padding: 2px 10px;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      white-space: nowrap
+    }
+
+    /* 3. Secondary tabs */
+    #sectabs {
+      height: 28px;
+      min-height: 28px;
+      background: #aaa;
+      display: flex;
+      align-items: stretch;
+      padding: 0 4px;
+      gap: 2px
+    }
+
+    .sectab {
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #444;
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-bottom: none
+    }
+
+    .sectab:hover {
+      background: #b5b5b5
+    }
+
+    .sectab.active {
+      background: #ccc;
+      border-color: #999;
+      color: #111
+    }
+
+    /* 4. Conditions toolbar */
+    #condbar {
+      height: 28px;
+      min-height: 28px;
+      background: #bbb;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      gap: 4px;
+      border-bottom: 1px solid #aaa
+    }
+
+    #condbar .cb-label {
+      font-size: 10px;
+      color: #555;
+      padding: 0 4px
+    }
+
+    .cb-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block
+    }
+
+    .cb-dot.r {
+      background: #999
+    }
+
+    .cb-dot.g {
+      background: #777
+    }
+
+    /* 5. Main body */
+    #main {
+      flex: 1;
+      display: flex;
+      min-height: 0
+    }
+
+    /* Left panel */
+    #left-panel {
+      width: 280px;
+      min-width: 280px;
+      display: flex;
+      flex-direction: column;
+      background: #e8e8e8;
+      border-right: 1px solid #bbb
+    }
+
+    /* Thumbnail */
+    #thumb-panel {
+      height: 180px;
+      min-height: 60px;
+      border-bottom: 2px solid #bbb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ddd;
+      position: relative;
+      overflow: hidden
+    }
+
+    #thumb-panel .thumb-rect {
+      width: 120px;
+      height: 80px;
+      background: #ccc;
+      border: 1px solid #aaa
+    }
+
+    .resize-handle {
+      height: 5px;
+      background: #bbb;
+      cursor: ns-resize;
+      border-top: 1px solid #aaa;
+      border-bottom: 1px solid #aaa
+    }
+
+    /* Conditions panel */
+    #cond-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      border-bottom: 2px solid #bbb
+    }
+
+    #cond-tabs {
+      height: 24px;
+      min-height: 24px;
+      display: flex;
+      background: #d5d5d5;
+      border-bottom: 1px solid #bbb
+    }
+
+    #cond-tabs .ctab {
+      padding: 0 10px;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-right: 1px solid #bbb;
+      color: #555
+    }
+
+    #cond-tabs .ctab:hover {
+      background: #c8c8c8
+    }
+
+    #cond-tabs .ctab.active {
+      background: #e8e8e8;
+      font-weight: 600;
+      color: #222
+    }
+
+    #cond-header {
+      display: flex;
+      height: 20px;
+      min-height: 20px;
+      background: #d0d0d0;
+      border-bottom: 1px solid #bbb;
+      font-size: 10px;
+      font-weight: 600;
+      color: #555;
+      align-items: center
+    }
+
+    #cond-header span:first-child {
+      width: 36px;
+      text-align: center
+    }
+
+    #cond-header span:last-child {
+      flex: 1;
+      padding-left: 4px;
+      display: flex;
+      align-items: center;
+      gap: 3px
+    }
+
+    #cond-header i {
+      font-size: 10px
+    }
+
+    #cond-list {
+      flex: 1;
+      overflow-y: auto;
+      background: #f0f0f0
+    }
+
+    .cond-row {
+      display: flex;
+      align-items: center;
+      padding: 2px 4px;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 11px;
+      cursor: pointer;
+      min-height: 20px
+    }
+
+    .cond-row:hover {
+      background: #e0e0e0
+    }
+
+    .cond-row .sq {
+      width: 10px;
+      height: 10px;
+      background: #999;
+      border: 1px solid #777;
+      margin: 0 4px;
+      flex-shrink: 0
+    }
+
+    .cond-row .num {
+      width: 28px;
+      text-align: center;
+      color: #888;
+      font-size: 10px;
+      flex-shrink: 0
+    }
+
+    .cond-row .name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .cond-section {
+      padding: 3px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      background: #d8d8d8;
+      border-bottom: 1px solid #ccc;
+      color: #555;
+      text-transform: uppercase
+    }
+
+    .cond-row .tooltip-popup {
+      position: absolute;
+      left: 60px;
+      background: #444;
+      color: #eee;
+      padding: 3px 8px;
+      font-size: 10px;
+      border-radius: 2px;
+      white-space: nowrap;
+      z-index: 10;
+      pointer-events: none
+    }
+
+    #cond-toolbar {
+      height: 26px;
+      min-height: 26px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 0 4px;
+      background: #d5d5d5;
+      border-top: 1px solid #bbb
+    }
+
+    #cond-toolbar .tb-btn {
+      width: 22px;
+      height: 22px
+    }
+
+    #cond-toolbar .tb-btn i {
+      font-size: 14px
+    }
+
+    /* Layer panel */
+    #layer-panel {
+      height: 220px;
+      min-height: 60px;
+      display: flex;
+      flex-direction: column
+    }
+
+    #layer-header {
+      display: flex;
+      height: 20px;
+      min-height: 20px;
+      background: #d0d0d0;
+      border-bottom: 1px solid #bbb;
+      font-size: 10px;
+      font-weight: 600;
+      color: #555;
+      align-items: center
+    }
+
+    #layer-header span:first-child {
+      width: 40px;
+      text-align: center
+    }
+
+    #layer-header span:last-child {
+      flex: 1;
+      padding-left: 4px
+    }
+
+    #layer-list {
+      flex: 1;
+      overflow-y: auto;
+      background: #f0f0f0
+    }
+
+    .layer-row {
+      display: flex;
+      align-items: center;
+      padding: 2px 4px;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 11px;
+      cursor: pointer;
+      min-height: 20px
+    }
+
+    .layer-row:hover {
+      background: #e0e0e0
+    }
+
+    .layer-row.hl {
+      background: #d0d5da
+    }
+
+    .layer-row input[type=checkbox] {
+      margin: 0 6px 0 8px;
+      accent-color: #888
+    }
+
+    .layer-row .lname {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    #layer-toolbar {
+      height: 26px;
+      min-height: 26px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 0 4px;
+      background: #d5d5d5;
+      border-top: 1px solid #bbb
+    }
+
+    #layer-toolbar .tb-btn {
+      width: 22px;
+      height: 22px
+    }
+
+    #layer-toolbar .tb-btn i {
+      font-size: 14px
+    }
+
+    /* Right area */
+    #right-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0
+    }
+
+    #plan-row {
+      flex: 1;
+      display: flex;
+      min-height: 0
+    }
+
+    #plan-view {
+      flex: 1;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #bbb;
+      font-size: 18px;
+      font-style: italic
+    }
+
+    #right-tools {
+      width: 28px;
+      min-width: 28px;
+      background: #555;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4px 0;
+      gap: 2px
+    }
+
+    #right-tools .tb-btn {
+      width: 24px;
+      height: 24px;
+      background: #4a4a4a;
+      border-color: #444
+    }
+
+    #right-tools .tb-btn i {
+      font-size: 14px
+    }
+
+    #right-tools .tb-btn:hover {
+      background: #3a3a3a
+    }
+
+    /* Status bar */
+    #statusbar {
+      height: 22px;
+      min-height: 22px;
+      background: #444;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 11px;
+      color: #bbb
+    }
+
+    #statusbar .left {
+      flex: 1
+    }
+
+    #statusbar .center {
+      flex: 1;
+      text-align: center
+    }
+
+    #statusbar .right {
+      flex: 1;
+      text-align: right
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+
+    <!-- ═══ 1. Title bar ═══ -->
+    <div id="titlebar">
+      <div class="left">
+        <span class="brand">RUDUS</span>
+        <span class="project">[Project Name]</span>
+      </div>
+      <div class="right">[AI features here?]</div>
+    </div>
+
+    <!-- 1. Menu bar -->
+    <div id="menubar">
+      <span>File</span><span>Edit</span><span>View</span><span>Tools</span><span>Image</span><span>Project</span><span>Master</span><span>Digitizer</span><span>Training</span><span>Help</span>
+    </div>
+
+    <!-- 2. Toolbar row 1 -->
+    <div class="toolbar">
+      <div class="tb-btn" title="New"><i class="ti ti-file"></i></div>
+      <div class="tb-btn" title="Open"><i class="ti ti-folder-open"></i></div>
+      <div class="tb-btn" title="Save"><i class="ti ti-device-floppy"></i></div>
+      <div class="tb-btn" title="Print"><i class="ti ti-printer"></i></div>
+      <div class="tb-sep"></div>
+      <div class="tb-btn" title="Undo"><i class="ti ti-arrow-back"></i></div>
+      <div class="tb-btn" title="Redo"><i class="ti ti-arrow-forward"></i></div>
+      <div class="tb-sep"></div>
+      <div class="tb-dropdown">Cover Sheet <i class="ti ti-chevron-down"></i></div>
+      <div class="tb-btn" title="Send"><i class="ti ti-send"></i></div>
+      <div class="tb-spacer"></div>
+      <div class="tb-dropdown">Project View <i class="ti ti-chevron-down"></i></div>
+      <div class="tb-dropdown" style="margin-left:4px">1270 Mission – 100% SD Set <i class="ti ti-chevron-down"></i>
+      </div>
+    </div>
+
+    <!-- 3. Secondary tabs -->
+    <div id="sectabs">
+      <div class="sectab">Projects</div>
+      <div class="sectab active">Takeoff</div>
+      <div class="sectab">Summary</div>
+      <div class="sectab">Estimate</div>
+      <div class="sectab">Project Express</div>
+      <div class="sectab">Resources</div>
+      <div class="sectab">Trending</div>
+    </div>
+
+    <!-- 4. Toolbar row 2 -->
+    <div class="toolbar">
+      <div class="tb-btn" title="Back"><i class="ti ti-arrow-left"></i></div>
+      <div class="tb-btn" title="Forward"><i class="ti ti-arrow-right"></i></div>
+      <div class="tb-dropdown" style="max-width:200px"><span
+          style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">S2.21 – 21ST LEVEL FRAM...</span> <i
+          class="ti ti-chevron-down"></i></div>
+      <div class="tb-btn" title="Prev page"><i class="ti ti-chevron-left"></i></div>
+      <div class="tb-btn" title="Next page"><i class="ti ti-chevron-right"></i></div>
+      <div class="tb-sep"></div>
+      <div class="tb-btn active" title="Pointer"><i class="ti ti-pointer"></i></div>
+      <div class="tb-btn" title="Zoom In"><i class="ti ti-zoom-in"></i></div>
+      <div class="tb-btn" title="Zoom Out"><i class="ti ti-zoom-out"></i></div>
+      <div class="tb-btn" title="Pan"><i class="ti ti-hand-stop"></i></div>
+      <div class="tb-sep"></div>
+      <div class="tb-btn" title="Linear"><i class="ti ti-ruler"></i></div>
+      <div class="tb-btn" title="Area"><i class="ti ti-vector-triangle"></i></div>
+      <div class="tb-btn" title="Count"><i class="ti ti-circle-dot"></i></div>
+      <div class="tb-spacer"></div>
+      <div class="tb-dropdown">feet <i class="ti ti-chevron-down"></i></div>
+      <div class="tb-dropdown" style="margin-left:4px">1/8" = 1' 0" <i class="ti ti-chevron-down"></i></div>
+      <div class="tb-dropdown" style="margin-left:4px">All Areas <i class="ti ti-chevron-down"></i></div>
+      <div class="tb-green" style="margin-left:6px">Try Takeoff Boost!</div>
+    </div>
+
+    <!-- 5. Conditions toolbar -->
+    <div id="condbar">
+      <span class="cb-label">Letter</span>
+      <div class="tb-btn" style="width:20px;height:20px;background:transparent;border:none"><i class="ti ti-printer"
+          style="font-size:13px;color:#666"></i></div>
+      <span class="cb-dot r"></span>
+      <span class="cb-dot g"></span>
+      <div class="tb-sep" style="height:16px"></div>
+      <div class="tb-btn" style="width:20px;height:20px;background:transparent;border:none"><i
+          class="ti ti-layers-subtract" style="font-size:13px;color:#666"></i></div>
+      <div class="tb-btn" style="width:20px;height:20px;background:transparent;border:none"><i class="ti ti-eye"
+          style="font-size:13px;color:#666"></i></div>
+    </div>
+
+    <!-- 6. Main body -->
+    <div id="main">
+
+      <!-- Left panel -->
+      <div id="left-panel">
+
+        <!-- Thumbnail -->
+        <div id="thumb-panel">
+          <div class="thumb-rect"></div>
+        </div>
+        <div class="resize-handle"></div>
+
+        <!-- Conditions -->
+        <div id="cond-panel">
+          <div id="cond-tabs">
+            <div class="ctab active" data-ctab="pv">Project View</div>
+            <div class="ctab" data-ctab="cond">Conditions</div>
+            <div class="ctab" data-ctab="zones">Zones</div>
+            <div class="ctab" data-ctab="comments">Comments</div>
+          </div>
+          <div id="cond-header"><span>No.</span><span>Name <i class="ti ti-arrow-down"></i></span></div>
+          <div id="cond-list">
+            <div class="cond-row"><span class="num">1</span><span class="sq"></span><span class="name">Column –
+                rectangular (24" x 24" x 8.50')</span></div>
+            <div class="cond-row"><span class="num">2</span><span class="sq"></span><span class="name">Column –
+                rectangular (24" x 24" x 8.50') – 2nd flr</span></div>
+            <div class="cond-row"><span class="num">3</span><span class="sq"></span><span class="name">Column – round
+                (dia" x h')</span></div>
+            <div class="cond-row" style="position:relative"><span class="num">4</span><span class="sq"></span><span
+                class="name">Pedestals – rectangular (w" x d" x h')</span><span class="tooltip-popup">Pedestals –
+                rectangular (w" x d" x h')</span></div>
+            <div class="cond-row"><span class="num">5</span><span class="sq"></span><span class="name">Pedestals – round
+                (dia" x h')</span></div>
+            <div class="cond-row"><span class="num">6</span><span class="sq"></span><span class="name">Plaster (24" x
+                24" x 12.83')</span></div>
+            <div class="cond-section">CONC WALLS</div>
+            <div class="cond-row"><span class="num">7</span><span class="sq"></span><span class="name">Wall – 8" CMU
+                (L.F.)</span></div>
+            <div class="cond-row"><span class="num">8</span><span class="sq"></span><span class="name">Wall – 12"
+                cast-in-place</span></div>
+            <div class="cond-row"><span class="num">9</span><span class="sq"></span><span class="name">Wall – retaining
+                (h varies)</span></div>
+          </div>
+          <div id="cond-toolbar">
+            <div class="tb-btn" title="Add"><i class="ti ti-plus"></i></div>
+            <div class="tb-btn" title="Edit"><i class="ti ti-edit"></i></div>
+            <div class="tb-btn" title="Delete"><i class="ti ti-trash"></i></div>
+            <div class="tb-btn" title="Duplicate"><i class="ti ti-copy"></i></div>
+            <div class="tb-btn" title="Move Up"><i class="ti ti-arrow-up"></i></div>
+            <div class="tb-btn" title="Move Down"><i class="ti ti-arrow-down"></i></div>
+          </div>
+        </div>
+
+        <div class="resize-handle"></div>
+
+        <!-- Layers -->
+        <div id="layer-panel">
+          <div id="layer-header"><span>Show</span><span>Layer</span></div>
+          <div id="layer-list">
+            <div class="layer-row hl"><input type="checkbox" checked><span class="lname">Image</span></div>
+            <div class="layer-row hl"><input type="checkbox" checked><span class="lname">Annotation</span></div>
+            <div class="layer-row"><input type="checkbox"><span class="lname">Default</span></div>
+            <div class="layer-row"><input type="checkbox"><span class="lname">Comments</span></div>
+            <div class="layer-row"><input type="checkbox" checked><span class="lname">SITE CONCRETE & AC PAV...</span>
+            </div>
+            <div class="layer-row"><input type="checkbox" checked><span class="lname">FOUNDATIONS</span></div>
+            <div class="layer-row"><input type="checkbox" checked><span class="lname">SLAB ON GRADE</span></div>
+            <div class="layer-row"><input type="checkbox" checked><span class="lname">CONC WALLS & COLUMNS</span></div>
+            <div class="layer-row"><input type="checkbox"><span class="lname">EMBEDS</span></div>
+            <div class="layer-row"><input type="checkbox" checked><span class="lname">SUSPENDED SLABS</span></div>
+            <div class="layer-row"><input type="checkbox"><span class="lname">ROUGH CARPENTRY</span></div>
+            <div class="layer-row"><input type="checkbox"><span class="lname">BUDGET</span></div>
+            <div class="layer-row"><input type="checkbox"><span class="lname">TOPPINGS & SLAB ON ME...</span></div>
+          </div>
+          <div id="layer-toolbar">
+            <div class="tb-btn" title="Add"><i class="ti ti-plus"></i></div>
+            <div class="tb-btn" title="Delete"><i class="ti ti-trash"></i></div>
+            <div class="tb-btn" title="Toggle"><i class="ti ti-checkbox"></i></div>
+            <div class="tb-btn" title="Color"><i class="ti ti-square"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right area -->
+      <div id="right-area">
+        <div id="plan-row">
+          <div id="plan-view">[ plan ]</div>
+          <div id="right-tools">
+            <div class="tb-btn" title="Zoom In"><i class="ti ti-zoom-in"></i></div>
+            <div class="tb-btn" title="Zoom Out"><i class="ti ti-zoom-out"></i></div>
+            <div class="tb-btn" title="Fit"><i class="ti ti-arrows-maximize"></i></div>
+            <div class="tb-btn" title="Rotate"><i class="ti ti-rotate"></i></div>
+            <div class="tb-btn" title="Grid"><i class="ti ti-layout-grid"></i></div>
+            <div class="tb-btn" title="Pan"><i class="ti ti-hand-stop"></i></div>
+            <div class="tb-btn" title="Layers"><i class="ti ti-stack-2"></i></div>
+            <div class="tb-btn" title="Measure"><i class="ti ti-ruler"></i></div>
+          </div>
+        </div>
+        <div id="statusbar">
+          <span class="left">Page 31 of 48</span>
+          <span class="center">E (30" x 42")</span>
+          <span class="right">42%&nbsp;&nbsp;FREE PlanViewer Mode</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Secondary tab switching
+    document.querySelectorAll('.sectab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.sectab').forEach(s => s.classList.remove('active'));
+        t.classList.add('active');
+      });
+    });
+    // Conditions panel tab switching
+    document.querySelectorAll('#cond-tabs .ctab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('#cond-tabs .ctab').forEach(s => s.classList.remove('active'));
+        t.classList.add('active');
+      });
+    });
+    // Toolbar 2 tool selection
+    const tb2btns = document.querySelectorAll('.toolbar:nth-of-type(4) .tb-btn');
+    // Actually select only the drawing tool buttons between separators
+  </script>
+</body>
+
+</html>
