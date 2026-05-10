@@ -520,50 +520,7 @@
             color: #555;
         }
 
-        /* AI UI Additions */
-        .ai-ribbon-toolbar {
-            background: #2c2c2c;
-            padding: 6px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            border-radius: 12px;
-            border: 1px solid #444444;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            margin-top: 4px;
-        }
 
-        .ai-toolbar-btn {
-            background: transparent;
-            color: #e0e0e0;
-            padding: 8px 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: normal;
-            cursor: pointer;
-            font-size: 12px;
-            white-space: nowrap;
-            border-radius: 6px;
-        }
-
-        .ai-toolbar-btn:hover {
-            background: #444444;
-            color: #ffffff;
-        }
-
-        .ai-toolbar-btn.active {
-            background: #4e6f52;
-            color: #ffffff;
-            font-weight: 500;
-        }
-
-        .ai-toolbar-divider {
-            width: 1px;
-            height: 24px;
-            background: #444444;
-            margin: 0 4px;
-        }
 
         .ai-ask-btn {
             background: #4e6f52;
@@ -903,12 +860,21 @@
             <!-- AI Tools -->
             <div class="ribbon-group" style="border-right:none; padding-left: 12px;">
                 <div class="ribbon-group-items" style="align-items: center;">
-                    <div class="ai-ribbon-toolbar">
-                        <div class="ai-toolbar-btn active"><i class="ti ti-wand"></i>Detect elements</div>
-                        <div class="ai-toolbar-btn"><i class="ti ti-message-circle"></i> Ask the plan</div>
-                        <div class="ai-toolbar-btn"><i class="ti ti-tags"></i> Auto-annotate</div>
-                        <div class="ai-toolbar-divider"></div>
-                        <div class="ai-toolbar-btn"><i class="ti ti-arrow-up-right"></i> Export to estimate</div>
+                    <div class="rb-btn active">
+                        <i class="ti ti-wand"></i>
+                        <span>Detect<br>elements</span>
+                    </div>
+                    <div class="rb-btn">
+                        <i class="ti ti-message-circle"></i>
+                        <span>Ask the<br>plan</span>
+                    </div>
+                    <div class="rb-btn">
+                        <i class="ti ti-tags"></i>
+                        <span>Auto-<br>annotate</span>
+                    </div>
+                    <div class="rb-btn">
+                        <i class="ti ti-arrow-up-right"></i>
+                        <span>Export to<br>estimate</span>
                     </div>
                 </div>
                 <div class="ribbon-group-label">Rudus AI</div>
@@ -1143,8 +1109,8 @@
         const chatEmpty = document.getElementById('chat-empty');
 
         // "Ask the plan" button in toolbar
-        document.querySelectorAll('.ai-toolbar-btn').forEach(btn => {
-            if (btn.textContent.trim().includes('Ask the plan')) {
+        document.querySelectorAll('.rb-btn').forEach(btn => {
+            if (btn.textContent.trim().includes('Ask the')) {
                 btn.addEventListener('click', () => openChat());
             }
         });
