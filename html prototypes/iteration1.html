@@ -1327,12 +1327,19 @@
     const reviewStatusColor = document.getElementById('review-status-color');
     const reviewFooterName = document.getElementById('review-footer-name');
     const reviewDots = document.getElementById('review-dots').children;
+    const planImage = document.getElementById('plan-image');
+
+    let detectionStep = 0;
 
     function closeReviewCard() {
       reviewCard.style.display = 'none';
       treeItems.forEach(i => i.classList.remove('selected'));
       const detectBtn = Array.from(aiToolbarBtns).find(b => b.textContent.trim().includes('Detect elements'));
       if (detectBtn) detectBtn.classList.remove('active');
+      
+      // Reset image state
+      detectionStep = 0;
+      planImage.src = 'tmp.png';
     }
 
     function openReviewCard(item) {
@@ -1449,6 +1456,18 @@
           }
         }
       });
+    });
+
+    // Keyboard shortcuts for Detect Elements mode
+    document.addEventListener('keydown', (e) => {
+      if (reviewCard.style.display !== 'none' && e.key === 'Tab') {
+        e.preventDefault();
+        detectionStep++;
+        if (detectionStep > 3) {
+          detectionStep = 3; // Keep it at 3 for now if it goes over
+        }
+        planImage.src = `group${detectionStep}.png`;
+      }
     });
 
     // Send message
