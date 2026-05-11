@@ -1122,6 +1122,64 @@
             <span>Control Panel 2</span>
             <div><i class="ti ti-pin"></i> <i class="ti ti-chevron-down"></i> <i class="ti ti-x"></i></div>
           </div>
+          
+          <div id="ai-review-card" class="sub-panel" style="display: none; background: #111;">
+            <div class="sub-panel-header" style="background: white; color: black; border-bottom: 1px solid #ccc;">
+              <span><i class="ti ti-circle-filled" id="review-status-color" style="color: #4ECDC4; font-size: 10px;"></i> Detect Elements</span>
+            </div>
+            <div style="background-color: #1A1A1A; color: #FFFFFF; padding: 16px; margin: 0; border-bottom: 1px solid #444;">
+              <!-- Top Row -->
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <div style="font-size: 20px; font-weight: bold;"><span style="color: white;">4</span> <span style="color: #888; font-size: 14px; font-weight: normal;">of 7</span></div>
+                <div style="display: flex; gap: 4px;" id="review-dots">
+                  <div style="width: 12px; height: 12px; border-radius: 2px; background: #4ECDC4;"></div>
+                  <div style="width: 12px; height: 12px; border-radius: 2px; background: #4ECDC4;"></div>
+                  <div style="width: 12px; height: 12px; border-radius: 2px; background: #4ECDC4;"></div>
+                  <div style="width: 12px; height: 12px; border-radius: 2px; border: 2px solid #4ECDC4; background: transparent;"></div>
+                  <div style="width: 12px; height: 12px; border-radius: 2px; border: 2px solid #555; background: transparent;"></div>
+                  <div style="width: 12px; height: 12px; border-radius: 2px; border: 2px solid #555; background: transparent;"></div>
+                  <div style="width: 12px; height: 12px; border-radius: 2px; border: 2px solid #555; background: transparent;"></div>
+                </div>
+              </div>
+              
+              <!-- Info -->
+              <div style="color: #888; font-size: 10px; font-weight: bold; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase;" id="review-type">SPREAD FOOTING</div>
+              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+                <div id="review-vertical-bar" style="width: 4px; height: 32px; background: #4ECDC4;"></div>
+                <div id="review-id" style="font-size: 28px; font-weight: bold; color: white; line-height: 1;">P6</div>
+              </div>
+              <div id="review-dims" style="color: #888; font-family: monospace; font-size: 12px; margin-bottom: 16px;">9.0' × 9.0' × 1.5' deep</div>
+              
+              <!-- Grid -->
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 24px; background: #2A2A2A; padding: 6px 12px; border-radius: 4px; display: inline-flex;">
+                <span style="color: #666; font-size: 10px; font-weight: bold; letter-spacing: 1px;">GRID</span>
+                <span style="color: white; font-weight: bold;">D-3</span>
+              </div>
+
+              <!-- Shortcuts -->
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px;">
+                <div style="display: flex; gap: 12px; align-items: center;">
+                  <div style="background: #2A2A2A; border-radius: 4px; padding: 4px 12px; font-size: 12px; color: #888; min-width: 60px; text-align: center; border: 1px solid #333;">Tab</div>
+                  <div style="color: #666; font-size: 12px;">accept</div>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                  <div style="background: #2A2A2A; border-radius: 4px; padding: 4px 12px; font-size: 12px; color: #888; min-width: 60px; text-align: center; border: 1px solid #333;">X</div>
+                  <div style="color: #666; font-size: 12px;">skip</div>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                  <div style="background: #2A2A2A; border-radius: 4px; padding: 4px 12px; font-size: 12px; color: #888; min-width: 60px; text-align: center; border: 1px solid #333;">Ctrl Tab</div>
+                  <div style="color: #666; font-size: 12px;">accept rest</div>
+                </div>
+              </div>
+
+              <!-- Footer -->
+              <div style="display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 12px; font-size: 11px; color: #666;">
+                <div id="review-footer-name">Footings - Length</div>
+                <div>Sheet S2.0</div>
+              </div>
+            </div>
+          </div>
+
           <div class="sub-panel">
             <div class="sub-panel-header">
               <span>Quantity List</span>
@@ -1276,6 +1334,60 @@
       const askBtn = Array.from(aiToolbarBtns).find(b => b.textContent.trim().includes('Ask the plan'));
       if (askBtn) askBtn.classList.remove('active');
     }
+
+    // Review Panel logic
+    const reviewCard = document.getElementById('ai-review-card');
+    const reviewType = document.getElementById('review-type');
+    const reviewId = document.getElementById('review-id');
+    const reviewDims = document.getElementById('review-dims');
+    const reviewVerticalBar = document.getElementById('review-vertical-bar');
+    const reviewStatusColor = document.getElementById('review-status-color');
+    const reviewFooterName = document.getElementById('review-footer-name');
+    const reviewDots = document.getElementById('review-dots').children;
+
+    // Attach click listener to Footing traces
+    const treeItems = document.querySelectorAll('.tree-view .tree-item');
+    treeItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        // Prevent if clicking on expand icon
+        if (e.target.tagName === 'I') return;
+        
+        const colorBox = item.querySelector('.color-box');
+        if (colorBox) {
+          // Remove selected from others
+          treeItems.forEach(i => i.classList.remove('selected'));
+          item.classList.add('selected');
+
+          const text = item.textContent.trim();
+          const match = text.match(/(.*?) - (.*?) \((.*?)\) - (.*)/);
+          
+          if (match) {
+            const color = colorBox.style.backgroundColor;
+            reviewType.textContent = (match[1] + ' ' + match[2]).toUpperCase();
+            reviewDims.textContent = match[3] + " deep";
+            reviewId.textContent = match[4];
+            reviewFooterName.textContent = text;
+            
+            // Update colors
+            reviewVerticalBar.style.backgroundColor = color;
+            reviewStatusColor.style.color = color;
+            
+            // Update dots
+            reviewDots[0].style.background = color;
+            reviewDots[0].style.borderColor = color;
+            reviewDots[1].style.background = color;
+            reviewDots[1].style.borderColor = color;
+            reviewDots[2].style.background = color;
+            reviewDots[2].style.borderColor = color;
+            reviewDots[3].style.borderColor = color;
+            reviewDots[3].style.background = 'transparent';
+            
+            reviewCard.style.display = 'flex';
+            reviewCard.style.flexDirection = 'column';
+          }
+        }
+      });
+    });
 
     // Send message
     function sendMessage() {
