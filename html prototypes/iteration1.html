@@ -925,8 +925,8 @@
               <div class="rb-select" style="width: 100px;">Page 6 of 32 <i class="ti ti-chevron-down"></i></div>
               <button class="nav-btn"><i class="ti ti-chevron-left"></i></button>
               <button class="nav-btn"><i class="ti ti-chevron-right"></i></button>
-              <button class="nav-btn" style="margin-left: 4px;"><i class="ti ti-zoom-out"></i></button>
-              <button class="nav-btn"><i class="ti ti-zoom-in"></i></button>
+              <button id="zoom-out-btn" class="nav-btn" style="margin-left: 4px;"><i class="ti ti-zoom-out"></i></button>
+              <button id="zoom-in-btn" class="nav-btn"><i class="ti ti-zoom-in"></i></button>
             </div>
           </div>
         </div>
@@ -1104,8 +1104,8 @@
       <div id="center-panel">
         <div class="plan-canvas">
           <!-- Mock content to represent the drawing and takeoff -->
-          <img src="tmp.png" alt="Plan"
-            style="width: 100%; height: 100%; object-fit: contain; opacity: 0.8; pointer-events: none;">
+          <img id="plan-image" src="tmp.png" alt="Plan"
+            style="width: 100%; height: 100%; object-fit: contain; opacity: 0.8; pointer-events: none; transition: transform 0.2s ease; transform-origin: center;">
           <!-- AI Floating Toolbar -->
         </div>
       </div>
@@ -1297,48 +1297,26 @@
       customScaleModal.classList.remove('open');
     });
 
-    // Plan Zoom & Pan Logic
-    const centerPanel = document.getElementById('center-panel');
-    const planCanvas = document.querySelector('.plan-canvas');
-    let zoomScale = 1;
-    let isDragging = false;
-    let startX, startY;
-    let translateX = 0, translateY = 0;
+    // Zoom Logic
+    const zoomInBtn = document.getElementById('zoom-in-btn');
+    const zoomOutBtn = document.getElementById('zoom-out-btn');
+    const planImage = document.getElementById('plan-image');
+    let currentScale = 1;
 
-    centerPanel.addEventListener('wheel', (e) => {
-      e.preventDefault();
+    function applyZoom() {
+      planImage.style.transform = `scale(${currentScale})`;
+    }
 
-      // Handle pinch-to-zoom (ctrlKey) and regular scrolling
-      let delta = e.deltaY;
-      if (e.deltaMode === 1) { // DOM_DELTA_LINE
-        delta *= 15;
+    zoomInBtn.addEventListener('click', () => {
+      currentScale += 0.2;
+      applyZoom();
+    });
+
+    zoomOutBtn.addEventListener('click', () => {
+      if (currentScale > 0.2) {
+        currentScale -= 0.2;
+        applyZoom();
       }
-
-      // Calculate zoom
-      const zoomSensitivity = e.ctrlKey ? 0.01 : 0.005;
-      zoomScale -= delta * zoomSensitivity;
-      zoomScale = Math.min(Math.max(0.1, zoomScale), 10);
-
-      planCanvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${zoomScale})`;
-    }, { passive: false });
-
-    centerPanel.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      startX = e.clientX - translateX;
-      startY = e.clientY - translateY;
-      centerPanel.style.cursor = 'grabbing';
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      translateX = e.clientX - startX;
-      translateY = e.clientY - startY;
-      planCanvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${zoomScale})`;
-    });
-
-    window.addEventListener('mouseup', () => {
-      isDragging = false;
-      centerPanel.style.cursor = 'default';
     });
 
   </script>
