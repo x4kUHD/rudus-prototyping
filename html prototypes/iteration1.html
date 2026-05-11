@@ -1109,6 +1109,37 @@
           style="width: 100%; height: 100%; object-fit: contain; opacity: 0.8; pointer-events: none; transition: transform 0.2s ease; transform-origin: center;">
       </div>
 
+      <!-- Detect elements help tooltip -->
+      <div id="detect-tooltip" style="
+        display: none;
+        position: absolute;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #2c2c2c;
+        color: #e0e0e0;
+        font-size: 12px;
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: 1px solid #444;
+        white-space: nowrap;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 101;
+        pointer-events: none;
+      ">
+        ← Select a trace to begin detection
+        <div style="
+          position: absolute;
+          bottom: -6px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0; height: 0;
+          border-left: 6px solid transparent;
+          border-right: 6px solid transparent;
+          border-top: 6px solid #444;
+        "></div>
+      </div>
+
       <!-- Toolbar -->
       <div class="ai-floating-toolbar">
         <div class="ai-toolbar-btn"><i class="ti ti-wand"></i>Detect elements</div>
@@ -1133,25 +1164,11 @@
               style="background-color: #1A1A1A; color: #FFFFFF; padding: 16px; margin: 0; border-bottom: 1px solid #444;">
               <!-- Top Row -->
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                <div style="font-size: 20px; font-weight: bold;"><span style="color: white;">4</span> <span
-                    style="color: #888; font-size: 14px; font-weight: normal;">of 7</span></div>
-                <div style="display: flex; gap: 4px;" id="review-dots">
-                  <div style="width: 12px; height: 12px; border-radius: 2px; background: #4ECDC4;"></div>
-                  <div style="width: 12px; height: 12px; border-radius: 2px; background: #4ECDC4;"></div>
-                  <div style="width: 12px; height: 12px; border-radius: 2px; background: #4ECDC4;"></div>
-                  <div
-                    style="width: 12px; height: 12px; border-radius: 2px; border: 2px solid #4ECDC4; background: transparent;">
-                  </div>
-                  <div
-                    style="width: 12px; height: 12px; border-radius: 2px; border: 2px solid #555; background: transparent;">
-                  </div>
-                  <div
-                    style="width: 12px; height: 12px; border-radius: 2px; border: 2px solid #555; background: transparent;">
-                  </div>
-                  <div
-                    style="width: 12px; height: 12px; border-radius: 2px; border: 2px solid #555; background: transparent;">
-                  </div>
+                <div style="font-size: 20px; font-weight: bold;">
+                  <span id="review-current-step" style="color: white;">1</span>
+                  <span id="review-total-steps" style="color: #888; font-size: 14px; font-weight: normal;">of 3</span>
                 </div>
+                <div style="display: flex; gap: 4px;" id="review-dots"></div>
               </div>
 
               <!-- Info -->
@@ -1326,20 +1343,72 @@
     const reviewVerticalBar = document.getElementById('review-vertical-bar');
     const reviewStatusColor = document.getElementById('review-status-color');
     const reviewFooterName = document.getElementById('review-footer-name');
-    const reviewDots = document.getElementById('review-dots').children;
+    const reviewDotsContainer = document.getElementById('review-dots');
+    const reviewCurrentStep = document.getElementById('review-current-step');
+    const reviewTotalSteps = document.getElementById('review-total-steps');
     const planImage = document.getElementById('plan-image');
 
+    // Preload all group images so Tab swaps are instant
+    const preloadedImages = {};
+    ['tmp', 'Group1', 'Group2', 'Group3'].forEach(name => {
+      const img = new Image();
+      img.src = `${name}.png`;
+      preloadedImages[name] = img;
+    });
+
+    const TOTAL_STEPS = 7;
     let detectionStep = 0;
+    let activeColor = '#4ECDC4';
+
+    function updateReviewProgress() {
+      // Update counter
+      reviewCurrentStep.textContent = detectionStep;
+      reviewTotalSteps.textContent = `of ${TOTAL_STEPS}`;
+
+      // Rebuild dots
+      reviewDotsContainer.innerHTML = '';
+      for (let i = 1; i <= TOTAL_STEPS; i++) {
+        const dot = document.createElement('div');
+        dot.style.cssText = 'width: 12px; height: 12px; border-radius: 2px; transition: background 0.2s, border-color 0.2s;';
+        if (i < detectionStep) {
+          // Fully accepted
+          dot.style.background = activeColor;
+          dot.style.border = `2px solid ${activeColor}`;
+        } else if (i === detectionStep) {
+          // Current (outlined with color)
+          dot.style.background = 'transparent';
+          dot.style.border = `2px solid ${activeColor}`;
+        } else {
+          // Future (grey)
+          dot.style.background = 'transparent';
+          dot.style.border = '2px solid #555';
+        }
+        reviewDotsContainer.appendChild(dot);
+      }
+    }
 
     function closeReviewCard() {
       reviewCard.style.display = 'none';
       treeItems.forEach(i => i.classList.remove('selected'));
       const detectBtn = Array.from(aiToolbarBtns).find(b => b.textContent.trim().includes('Detect elements'));
       if (detectBtn) detectBtn.classList.remove('active');
-      
+      hideDetectTooltip();
+
       // Reset image state
       detectionStep = 0;
       planImage.src = 'tmp.png';
+    }
+
+    const detectTooltip = document.getElementById('detect-tooltip');
+    let tooltipTimer = null;
+
+    function showDetectTooltip() {
+      detectTooltip.style.display = 'block';
+    }
+
+    function hideDetectTooltip() {
+      detectTooltip.style.display = 'none';
+      clearTimeout(tooltipTimer);
     }
 
     function openReviewCard(item) {
@@ -1361,18 +1430,13 @@
         reviewFooterName.textContent = text;
 
         // Update colors
+        activeColor = color;
         reviewVerticalBar.style.backgroundColor = color;
         reviewStatusColor.style.color = color;
 
-        // Update dots
-        reviewDots[0].style.background = color;
-        reviewDots[0].style.borderColor = color;
-        reviewDots[1].style.background = color;
-        reviewDots[1].style.borderColor = color;
-        reviewDots[2].style.background = color;
-        reviewDots[2].style.borderColor = color;
-        reviewDots[3].style.borderColor = color;
-        reviewDots[3].style.background = 'transparent';
+        // Reset step and draw progress
+        detectionStep = 1;
+        updateReviewProgress();
 
         reviewCard.style.display = 'flex';
         reviewCard.style.flexDirection = 'column';
@@ -1410,7 +1474,11 @@
 
           if (isDetect) {
             const selectedItem = Array.from(treeItems).find(i => i.classList.contains('selected'));
-            if (selectedItem) openReviewCard(selectedItem);
+            if (selectedItem) {
+              openReviewCard(selectedItem);
+            } else {
+              showDetectTooltip();
+            }
           } else {
             closeReviewCard();
           }
@@ -1452,6 +1520,7 @@
           if (item.classList.contains('selected')) {
             closeReviewCard();
           } else {
+            hideDetectTooltip();
             openReviewCard(item);
           }
         }
@@ -1462,11 +1531,11 @@
     document.addEventListener('keydown', (e) => {
       if (reviewCard.style.display !== 'none' && e.key === 'Tab') {
         e.preventDefault();
-        detectionStep++;
-        if (detectionStep > 3) {
-          detectionStep = 3; // Keep it at 3 for now if it goes over
+        if (detectionStep < TOTAL_STEPS) {
+          detectionStep++;
+          updateReviewProgress();
+          planImage.src = `Group${detectionStep}.png`;
         }
-        planImage.src = `group${detectionStep}.png`;
       }
     });
 
