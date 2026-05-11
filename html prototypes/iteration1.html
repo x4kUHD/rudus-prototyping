@@ -1189,14 +1189,14 @@
                 <div style="display: flex; gap: 12px; align-items: center;">
                   <div
                     style="background: #2A2A2A; border-radius: 4px; padding: 4px 12px; font-size: 12px; color: #888; min-width: 60px; text-align: center; border: 1px solid #333;">
-                    Ctrl Tab</div>
+                    Ctrl + Tab</div>
                   <div style="color: #666; font-size: 12px;">accept rest</div>
                 </div>
               </div>
 
               <!-- Footer -->
               <div
-                style="display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 12px; font-size: 11px; color: #666;">
+                style="display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top:x 12px; font-size: 11px; color: #666;">
                 <div id="review-footer-name">Footings - Length</div>
                 <div>Sheet S2.0</div>
               </div>
@@ -1316,20 +1316,96 @@
 
     // Toolbar buttons logic
     const aiToolbarBtns = document.querySelectorAll('.ai-floating-toolbar .ai-toolbar-btn');
+    const treeItems = document.querySelectorAll('.tree-view .tree-item');
+
+    // Review Panel elements
+    const reviewCard = document.getElementById('ai-review-card');
+    const reviewType = document.getElementById('review-type');
+    const reviewId = document.getElementById('review-id');
+    const reviewDims = document.getElementById('review-dims');
+    const reviewVerticalBar = document.getElementById('review-vertical-bar');
+    const reviewStatusColor = document.getElementById('review-status-color');
+    const reviewFooterName = document.getElementById('review-footer-name');
+    const reviewDots = document.getElementById('review-dots').children;
+
+    function closeReviewCard() {
+      reviewCard.style.display = 'none';
+      treeItems.forEach(i => i.classList.remove('selected'));
+      const detectBtn = Array.from(aiToolbarBtns).find(b => b.textContent.trim().includes('Detect elements'));
+      if (detectBtn) detectBtn.classList.remove('active');
+    }
+
+    function openReviewCard(item) {
+      const colorBox = item.querySelector('.color-box');
+      if (!colorBox) return;
+
+      // Remove selected from others
+      treeItems.forEach(i => i.classList.remove('selected'));
+      item.classList.add('selected');
+
+      const text = item.textContent.replace(/\s+/g, ' ').trim();
+      const match = text.match(/(.*?) - (.*?) \((.*?)\) - (.*)/);
+
+      if (match) {
+        const color = colorBox.style.backgroundColor;
+        reviewType.textContent = (match[1] + ' ' + match[2]).toUpperCase();
+        reviewDims.textContent = match[3] + " deep";
+        reviewId.textContent = match[4];
+        reviewFooterName.textContent = text;
+
+        // Update colors
+        reviewVerticalBar.style.backgroundColor = color;
+        reviewStatusColor.style.color = color;
+
+        // Update dots
+        reviewDots[0].style.background = color;
+        reviewDots[0].style.borderColor = color;
+        reviewDots[1].style.background = color;
+        reviewDots[1].style.borderColor = color;
+        reviewDots[2].style.background = color;
+        reviewDots[2].style.borderColor = color;
+        reviewDots[3].style.borderColor = color;
+        reviewDots[3].style.background = 'transparent';
+
+        reviewCard.style.display = 'flex';
+        reviewCard.style.flexDirection = 'column';
+
+        // Set toolbar state
+        const detectBtn = Array.from(aiToolbarBtns).find(b => b.textContent.trim().includes('Detect elements'));
+        if (detectBtn && !detectBtn.classList.contains('active')) {
+          aiToolbarBtns.forEach(b => b.classList.remove('active'));
+          detectBtn.classList.add('active');
+        }
+
+        // Close chat if it was open
+        closeChat();
+      }
+    }
+
     aiToolbarBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         const isAskPlan = btn.textContent.trim().includes('Ask the plan');
+        const isDetect = btn.textContent.trim().includes('Detect elements');
 
         if (btn.classList.contains('active')) {
           btn.classList.remove('active');
           if (isAskPlan) closeChat();
+          if (isDetect) closeReviewCard();
         } else {
           aiToolbarBtns.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
+
           if (isAskPlan) {
             openChat();
           } else {
             closeChat();
+          }
+
+          if (isDetect) {
+            const selectedItem = Array.from(treeItems).find(i => i.classList.contains('selected'));
+            if (selectedItem) openReviewCard(selectedItem);
+          } else {
+            closeReviewCard();
           }
         }
       });
@@ -1349,6 +1425,7 @@
         aiToolbarBtns.forEach(b => b.classList.remove('active'));
         askBtn.classList.add('active');
       }
+      closeReviewCard();
     }
 
     function closeChat() {
@@ -1357,19 +1434,7 @@
       if (askBtn) askBtn.classList.remove('active');
     }
 
-    // Review Panel logic
-    const reviewCard = document.getElementById('ai-review-card');
-    const reviewType = document.getElementById('review-type');
-    const reviewId = document.getElementById('review-id');
-    const reviewDims = document.getElementById('review-dims');
-
-    const reviewVerticalBar = document.getElementById('review-vertical-bar');
-    const reviewStatusColor = document.getElementById('review-status-color');
-    const reviewFooterName = document.getElementById('review-footer-name');
-    const reviewDots = document.getElementById('review-dots').children;
-
     // Attach click listener to Footing traces
-    const treeItems = document.querySelectorAll('.tree-view .tree-item');
     treeItems.forEach(item => {
       item.addEventListener('click', (e) => {
         // Prevent if clicking on expand icon
@@ -1377,36 +1442,10 @@
 
         const colorBox = item.querySelector('.color-box');
         if (colorBox) {
-          // Remove selected from others
-          treeItems.forEach(i => i.classList.remove('selected'));
-          item.classList.add('selected');
-
-          const text = item.textContent.replace(/\s+/g, ' ').trim();
-          const match = text.match(/(.*?) - (.*?) \((.*?)\) - (.*)/);
-
-          if (match) {
-            const color = colorBox.style.backgroundColor;
-            reviewType.textContent = (match[1] + ' ' + match[2]).toUpperCase();
-            reviewDims.textContent = match[3] + " deep";
-            reviewId.textContent = match[4];
-            reviewFooterName.textContent = text;
-
-            // Update colors
-            reviewVerticalBar.style.backgroundColor = color;
-            reviewStatusColor.style.color = color;
-
-            // Update dots
-            reviewDots[0].style.background = color;
-            reviewDots[0].style.borderColor = color;
-            reviewDots[1].style.background = color;
-            reviewDots[1].style.borderColor = color;
-            reviewDots[2].style.background = color;
-            reviewDots[2].style.borderColor = color;
-            reviewDots[3].style.borderColor = color;
-            reviewDots[3].style.background = 'transparent';
-
-            reviewCard.style.display = 'flex';
-            reviewCard.style.flexDirection = 'column';
+          if (item.classList.contains('selected')) {
+            closeReviewCard();
+          } else {
+            openReviewCard(item);
           }
         }
       });
