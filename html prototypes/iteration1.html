@@ -1111,8 +1111,8 @@
       <!-- Toolbar -->
       <div class="ai-floating-toolbar">
         <div class="ai-toolbar-btn"><i class="ti ti-wand"></i>Detect elements</div>
-        <div class="ai-toolbar-btn"><i class="ti ti-message-circle"></i> Ask the plan</div>
         <div class="ai-toolbar-btn"><i class="ti ti-tags"></i> Auto-annotate</div>
+        <div class="ai-toolbar-btn"><i class="ti ti-message-circle"></i> Ask the plan</div>
       </div>
 
       <!-- Right Panel -->
@@ -1238,17 +1238,19 @@
     const aiToolbarBtns = document.querySelectorAll('.ai-floating-toolbar .ai-toolbar-btn');
     aiToolbarBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        // Toggle active state mutually exclusively
+        const isAskPlan = btn.textContent.trim().includes('Ask the plan');
+
         if (btn.classList.contains('active')) {
           btn.classList.remove('active');
+          if (isAskPlan) closeChat();
         } else {
           aiToolbarBtns.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-        }
-
-        // Specific actions
-        if (btn.textContent.trim().includes('Ask the plan')) {
-          openChat();
+          if (isAskPlan) {
+            openChat();
+          } else {
+            closeChat();
+          }
         }
       });
     });
@@ -1261,10 +1263,18 @@
     function openChat() {
       chatPanel.classList.add('open');
       setTimeout(() => chatInput.focus(), 300);
+
+      const askBtn = Array.from(aiToolbarBtns).find(b => b.textContent.trim().includes('Ask the plan'));
+      if (askBtn && !askBtn.classList.contains('active')) {
+        aiToolbarBtns.forEach(b => b.classList.remove('active'));
+        askBtn.classList.add('active');
+      }
     }
 
     function closeChat() {
       chatPanel.classList.remove('open');
+      const askBtn = Array.from(aiToolbarBtns).find(b => b.textContent.trim().includes('Ask the plan'));
+      if (askBtn) askBtn.classList.remove('active');
     }
 
     // Send message
