@@ -1307,12 +1307,20 @@
 
     centerPanel.addEventListener('wheel', (e) => {
       e.preventDefault();
-      // Increase zoom sensitivity slightly for smoother scrolling
-      const zoomSensitivity = 0.002;
-      zoomScale -= e.deltaY * zoomSensitivity;
-      zoomScale = Math.min(Math.max(0.1, zoomScale), 10); // Limit zoom between 0.1x and 10x
+
+      // Handle pinch-to-zoom (ctrlKey) and regular scrolling
+      let delta = e.deltaY;
+      if (e.deltaMode === 1) { // DOM_DELTA_LINE
+        delta *= 15;
+      }
+
+      // Calculate zoom
+      const zoomSensitivity = e.ctrlKey ? 0.01 : 0.005;
+      zoomScale -= delta * zoomSensitivity;
+      zoomScale = Math.min(Math.max(0.1, zoomScale), 10);
+
       planCanvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${zoomScale})`;
-    });
+    }, { passive: false });
 
     centerPanel.addEventListener('mousedown', (e) => {
       isDragging = true;
