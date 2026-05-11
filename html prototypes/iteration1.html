@@ -344,8 +344,7 @@
     .tree-item {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 2px 4px;
+      padding: 2px 0;
       cursor: pointer;
       white-space: nowrap;
     }
@@ -1029,85 +1028,41 @@
               <div><i class="ti ti-filter"></i> <i class="ti ti-settings"></i></div>
             </div>
             <div class="tree-view">
-              <div class="tree-item"><i class="ti ti-minus"></i> <i class="ti ti-folder icon-yellow"></i> Concrete</div>
+              <div class="tree-item"><i class="ti ti-minus"></i> <i class="ti ti-folder icon-yellow"></i> Footings</div>
               <div style="padding-left: 16px;">
-                <div class="tree-item">
-                  <div style="display:flex; align-items:center; gap: 4px;">
-                    <span class="color-box" style="background: #4ECDC4; width: 10px; height: 10px; border-radius: 1px;"></span>
-                    Footing - Continuous (1.0' x 1.5') - F1
-                  </div>
-                  <span>0 LF</span>
-                </div>
-                <div class="tree-item">
-                  <div style="display:flex; align-items:center; gap: 4px;">
-                    <span class="color-box" style="background: #E8A030; width: 10px; height: 10px; border-radius: 1px;"></span>
-                    Footing - Grade Bm (6.0' x 4.0') - GB3
-                  </div>
-                  <span>0 LF</span>
-                </div>
-                <div class="tree-item">
-                  <div style="display:flex; align-items:center; gap: 4px;">
-                    <span class="color-box" style="background: #9B59B6; width: 10px; height: 10px; border-radius: 1px;"></span>
-                    Footing - Grade Bm (4.0' x 4.0') - GB2
-                  </div>
-                  <span>0 LF</span>
-                </div>
-                <div class="tree-item">
-                  <div style="display:flex; align-items:center; gap: 4px;">
-                    <span class="color-box" style="background: #2A6F3C; width: 10px; height: 10px; border-radius: 1px;"></span>
-                    Footing - Grade Bm (4.0' x 4.0') - GB1
-                  </div>
-                  <span>0 LF</span>
-                </div>
-                <div class="tree-item selected">
-                  <div style="display:flex; align-items:center; gap: 4px;">
-                    <span class="color-box" style="background: #3498DB; width: 10px; height: 10px; border-radius: 1px;"></span>
-                    Footing - Spread (4.0' x 4.0' x 1.5') - P1
-                  </div>
-                  <span>0 EA</span>
-                </div>
-                <div class="tree-item">
-                  <div style="display:flex; align-items:center; gap: 4px;">
-                    <span class="color-box" style="background: #B39DDB; width: 10px; height: 10px; border-radius: 1px;"></span>
-                    Footing - Spread (5.0' x 5.0' x 1.5') - P2
-                  </div>
-                  <span>0 EA</span>
-                </div>
-                <div class="tree-item">
-                  <div style="display:flex; align-items:center; gap: 4px;">
-                    <span class="color-box" style="background: #E74C3C; width: 10px; height: 10px; border-radius: 1px;"></span>
-                    Footing - Spread (6.0' x 6.0' x 1.5') - P3
-                  </div>
-                  <span>0 EA</span>
-                </div>
-                <div class="tree-item">
-                  <div style="display:flex; align-items:center; gap: 4px;">
-                    <span class="color-box" style="background: #95A5A6; width: 10px; height: 10px; border-radius: 1px;"></span>
-                    Footing - Spread (7.0' x 7.0' x 1.5') - P4
-                  </div>
-                  <span>0 EA</span>
-                </div>
-                <div class="tree-item">
-                  <div style="display:flex; align-items:center; gap: 4px;">
-                    <span class="color-box" style="background: #4ECDC4; width: 10px; height: 10px; border-radius: 1px;"></span>
-                    Footing - Spread (8.0' x 8.0' x 1.5') - P5
-                  </div>
-                  <span>0 EA</span>
-                </div>
-                <div class="tree-item">
-                  <div style="display:flex; align-items:center; gap: 4px;">
-                    <span class="color-box" style="background: #E8A030; width: 10px; height: 10px; border-radius: 1px;"></span>
-                    Footing - Spread (9.0' x 9.0' x 1.5') - P6
-                  </div>
-                  <span>0 EA</span>
-                </div>
-                <div class="tree-item">
-                  <div style="display:flex; align-items:center; gap: 4px;">
-                    <span class="color-box" style="background: #9B59B6; width: 10px; height: 10px; border-radius: 1px;"></span>
-                    Footing - Spread (3.0' x 3.0' x 1.5') - P7
-                  </div>
-                  <span>0 EA</span>
-                </div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #E8A030; width: 10px; height: 10px; border-radius: 1px;"></span> Footing -
+                  Continuous (1.0' x 1.5') - F1 each</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #E8A030; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Grade
+                  Bm (6.0' x 4.0') - GB3 each</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #E8A030; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Grade
+                  Bm (4.0' x 4.0') - GB2 each</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #E8A030; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Grade
+                  Bm (4.0' x 4.0') - GB1 each</div>
+                <div class="tree-item selected"><span class="color-box"
+                    style="background: #4ECDC4; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
+                  (4.0' x 4.0' x 1.5') - P1 each</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #4ECDC4; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
+                  (5.0' x 5.0' x 1.5') - P2 each</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #4ECDC4; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
+                  (6.0' x 6.0' x 1.5') - P3 each</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #4ECDC4; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
+                  (7.0' x 7.0' x 1.5') - P4 each</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #4ECDC4; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
+                  (8.0' x 8.0' x 1.5') - P5 each</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #4ECDC4; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
+                  (9.0' x 9.0' x 1.5') - P6 each</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #4ECDC4; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
+                  (3.0' x 3.0' x 1.5') - P7 each</div>
               </div>
             </div>
             <div class="angle-options">
