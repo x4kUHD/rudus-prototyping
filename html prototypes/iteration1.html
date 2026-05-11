@@ -1042,7 +1042,7 @@
                 <div class="tree-item"><span class="color-box"
                     style="background: #E8A030; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Grade
                   Bm (4.0' x 4.0') - GB1 each</div>
-                <div class="tree-item selected"><span class="color-box"
+                <div class="tree-item"><span class="color-box"
                     style="background: #4ECDC4; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
                   (4.0' x 4.0' x 1.5') - P1 each</div>
                 <div class="tree-item"><span class="color-box"
@@ -1295,6 +1295,42 @@
     saveModalBtn.addEventListener('click', () => {
       // Logic to save custom scale goes here
       customScaleModal.classList.remove('open');
+    });
+
+    // Plan Zoom & Pan Logic
+    const centerPanel = document.getElementById('center-panel');
+    const planCanvas = document.querySelector('.plan-canvas');
+    let zoomScale = 1;
+    let isDragging = false;
+    let startX, startY;
+    let translateX = 0, translateY = 0;
+
+    centerPanel.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      // Increase zoom sensitivity slightly for smoother scrolling
+      const zoomSensitivity = 0.002;
+      zoomScale -= e.deltaY * zoomSensitivity;
+      zoomScale = Math.min(Math.max(0.1, zoomScale), 10); // Limit zoom between 0.1x and 10x
+      planCanvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${zoomScale})`;
+    });
+
+    centerPanel.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      centerPanel.style.cursor = 'grabbing';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      planCanvas.style.transform = `translate(${translateX}px, ${translateY}px) scale(${zoomScale})`;
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+      centerPanel.style.cursor = 'default';
     });
 
   </script>
