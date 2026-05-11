@@ -925,7 +925,8 @@
               <div class="rb-select" style="width: 100px;">Page 6 of 32 <i class="ti ti-chevron-down"></i></div>
               <button class="nav-btn"><i class="ti ti-chevron-left"></i></button>
               <button class="nav-btn"><i class="ti ti-chevron-right"></i></button>
-              <button id="zoom-out-btn" class="nav-btn" style="margin-left: 4px;"><i class="ti ti-zoom-out"></i></button>
+              <button id="zoom-out-btn" class="nav-btn" style="margin-left: 4px;"><i
+                  class="ti ti-zoom-out"></i></button>
               <button id="zoom-in-btn" class="nav-btn"><i class="ti ti-zoom-in"></i></button>
             </div>
           </div>
@@ -1204,6 +1205,30 @@
     </div>
   </div>
 
+  <!-- Custom Scale Modal -->
+  <div id="custom-scale-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span>Custom Scale</span>
+        <button id="close-modal-btn"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 8px;">Enter your custom scale settings:</p>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" placeholder="1 inch"
+            style="padding: 6px; width: 100px; border: 1px solid #ccc; border-radius: 4px;" />
+          <span>=</span>
+          <input type="text" placeholder="10 ft"
+            style="padding: 6px; width: 100px; border: 1px solid #ccc; border-radius: 4px;" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancel-modal-btn" class="btn">Cancel</button>
+        <button id="save-modal-btn" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // AI Chat Panel logic
     const chatPanel = document.getElementById('ai-chat-panel');
@@ -1307,7 +1332,7 @@
       planImage.style.transform = `scale(${currentScale})`;
     }
 
-    zoomInBtn.addEventListener('click', () => {
+    zoomInBtn.addEventListener("click", () => {
       currentScale += 0.2;
       applyZoom();
     });
@@ -1320,30 +1345,6 @@
     });
 
   </script>
-
-  <!-- Custom Scale Modal -->
-  <div id="custom-scale-modal" class="modal-overlay">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span>Custom Scale</span>
-        <button id="close-modal-btn"><i class="ti ti-x"></i></button>
-      </div>
-      <div class="modal-body">
-        <p style="margin-bottom: 8px;">Enter your custom scale settings:</p>
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <input type="text" placeholder="1 inch"
-            style="padding: 6px; width: 100px; border: 1px solid #ccc; border-radius: 4px;" />
-          <span>=</span>
-          <input type="text" placeholder="10 ft"
-            style="padding: 6px; width: 100px; border: 1px solid #ccc; border-radius: 4px;" />
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button id="cancel-modal-btn" class="btn">Cancel</button>
-        <button id="save-modal-btn" class="btn btn-primary">Save</button>
-      </div>
-    </div>
-  </div>
 </body>
 
 </html>
