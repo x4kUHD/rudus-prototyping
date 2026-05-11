@@ -774,6 +774,95 @@
     .chat-empty-state span {
       font-size: 12px;
     }
+
+    /* Modal Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 4px;
+      width: 320px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 8px 12px;
+      background: #f0f0f0;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .modal-header button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+      border-radius: 2px;
+    }
+
+    .modal-header button:hover {
+      background: #e0e0e0;
+    }
+
+    .modal-body {
+      padding: 16px;
+      font-size: 12px;
+    }
+
+    .modal-footer {
+      padding: 8px 12px;
+      border-top: 1px solid #ccc;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 6px 16px;
+      border: 1px solid #ccc;
+      background: #f5f5f5;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .btn:hover {
+      background: #e0e0e0;
+    }
+
+    .btn-primary {
+      background: #4e6f52;
+      color: white;
+      border-color: #4e6f52;
+    }
+
+    .btn-primary:hover {
+      background: #5d8362;
+    }
   </style>
 </head>
 
@@ -875,7 +964,7 @@
       <div class="ribbon-group" style="border-right:none;">
         <div class="ribbon-group-items">
           <div class="rb-input-group">
-            <select class="rb-native-select" style="width: 120px;">
+            <select id="scale-select" class="rb-native-select" style="width: 120px;">
               <option>1/32" = 1' 0"</option>
               <option selected>1/16" = 1' 0"</option>
               <option>3/32" = 1' 0"</option>
@@ -1193,7 +1282,62 @@
     chatInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') sendMessage();
     });
+
+    // Custom Scale Modal Logic
+    const scaleSelect = document.getElementById('scale-select');
+    const customScaleModal = document.getElementById('custom-scale-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const cancelModalBtn = document.getElementById('cancel-modal-btn');
+    const saveModalBtn = document.getElementById('save-modal-btn');
+
+    function openModal() {
+      customScaleModal.classList.add('open');
+    }
+
+    function closeModal() {
+      customScaleModal.classList.remove('open');
+      // Reset select to a default value so "Custom scale" can be selected again
+      scaleSelect.selectedIndex = 1; // e.g., 1/16" = 1' 0"
+    }
+
+    scaleSelect.addEventListener('change', (e) => {
+      if (e.target.value === 'Custom scale') {
+        openModal();
+      }
+    });
+
+    closeModalBtn.addEventListener('click', closeModal);
+    cancelModalBtn.addEventListener('click', closeModal);
+    saveModalBtn.addEventListener('click', () => {
+      // Logic to save custom scale goes here
+      customScaleModal.classList.remove('open');
+    });
+
   </script>
+
+  <!-- Custom Scale Modal -->
+  <div id="custom-scale-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span>Custom Scale</span>
+        <button id="close-modal-btn"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 8px;">Enter your custom scale settings:</p>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" placeholder="1 inch"
+            style="padding: 6px; width: 100px; border: 1px solid #ccc; border-radius: 4px;" />
+          <span>=</span>
+          <input type="text" placeholder="10 ft"
+            style="padding: 6px; width: 100px; border: 1px solid #ccc; border-radius: 4px;" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancel-modal-btn" class="btn">Cancel</button>
+        <button id="save-modal-btn" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
