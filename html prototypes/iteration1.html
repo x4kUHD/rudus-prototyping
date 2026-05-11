@@ -521,7 +521,74 @@
       background: #ccc;
     }
 
-    /* Status bar */
+    /* Annotate panel rows */
+    .annotate-row {
+      padding: 8px 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .annotate-row:hover {
+      background: #f0f0f0;
+      cursor: pointer;
+    }
+
+    .annotate-row:last-child {
+      border-bottom: none;
+    }
+
+    .annotate-row-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+
+    .annotate-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .annotate-id {
+      font-weight: bold;
+      font-size: 12px;
+      flex: 1;
+    }
+
+    .annotate-count {
+      font-size: 11px;
+      color: #555;
+    }
+
+    .annotate-status-ok {
+      font-size: 14px;
+      color: #4e6f52;
+    }
+
+    .annotate-status-warn {
+      font-size: 14px;
+      color: #d4900a;
+    }
+
+    .annotate-row-detail {
+      font-size: 10px;
+      color: #888;
+      font-family: monospace;
+      padding-left: 16px;
+      margin-bottom: 2px;
+    }
+
+    .annotate-row-qty {
+      font-size: 10px;
+      color: #888;
+      padding-left: 16px;
+    }
+
+    .annotate-row-qty strong {
+      color: #333;
+    }
+
     #statusbar {
       height: 22px;
       background: #f0f0f0;
@@ -1140,6 +1207,37 @@
         "></div>
       </div>
 
+      <!-- Auto-annotate hover tooltip -->
+      <div id="annotate-tooltip" style="
+        display: none;
+        position: absolute;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #2c2c2c;
+        color: #e0e0e0;
+        font-size: 12px;
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: 1px solid #444;
+        white-space: nowrap;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 101;
+        pointer-events: none;
+      ">
+        Ctrl + Tab to accept all
+        <div style="
+          position: absolute;
+          bottom: -6px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0; height: 0;
+          border-left: 6px solid transparent;
+          border-right: 6px solid transparent;
+          border-top: 6px solid #444;
+        "></div>
+      </div>
+
       <!-- Toolbar -->
       <div class="ai-floating-toolbar">
         <div class="ai-toolbar-btn"><i class="ti ti-wand"></i>Detect elements</div>
@@ -1217,6 +1315,78 @@
                 <div id="review-footer-name">Footings - Length</div>
                 <div>Sheet S2.0</div>
               </div>
+            </div>
+          </div>
+
+          <!-- Auto-annotate Annotations Panel -->
+          <div id="annotate-panel" class="sub-panel"
+            style="display: none; flex: none; overflow-y: auto; max-height: 340px;">
+            <div class="sub-panel-header">
+              <span>Annotations</span>
+              <span style="font-weight: normal; color: #888; font-size: 11px;">57 total</span>
+            </div>
+            <div style="padding: 6px 0;">
+
+              <!-- P6 -->
+              <div class="annotate-row" data-image="p6.png">
+                <div class="annotate-row-top">
+                  <span class="annotate-swatch" style="background: #F5A623;"></span>
+                  <span class="annotate-id">P6</span>
+                  <span class="annotate-count">24 found</span>
+                  <i class="ti ti-circle-check annotate-status-ok"></i>
+                </div>
+                <div class="annotate-row-detail">9.0' × 9.0' × 1.5' deep</div>
+                <div class="annotate-row-qty">QTY <strong>2,916</strong> SF</div>
+              </div>
+
+              <!-- P5 -->
+              <div class="annotate-row" data-image="p5.png">
+                <div class="annotate-row-top">
+                  <span class="annotate-swatch" style="background: #B8E986;"></span>
+                  <span class="annotate-id">P5</span>
+                  <span class="annotate-count">12 found</span>
+                  <i class="ti ti-circle-check annotate-status-ok"></i>
+                </div>
+                <div class="annotate-row-detail">8.0' × 8.0' × 1.5' deep</div>
+                <div class="annotate-row-qty">QTY <strong>768</strong> SF</div>
+              </div>
+
+              <!-- P3 -->
+              <div class="annotate-row" data-image="p3.png">
+                <div class="annotate-row-top">
+                  <span class="annotate-swatch" style="background: #4A90E2;"></span>
+                  <span class="annotate-id">P3</span>
+                  <span class="annotate-count">8 found</span>
+                  <i class="ti ti-alert-triangle annotate-status-warn"></i>
+                </div>
+                <div class="annotate-row-detail">6.0' × 6.0' × 1.5' deep</div>
+                <div class="annotate-row-qty">QTY <strong>288</strong> SF</div>
+              </div>
+
+              <!-- P2 -->
+              <div class="annotate-row">
+                <div class="annotate-row-top">
+                  <span class="annotate-swatch" style="background: #C44D58;"></span>
+                  <span class="annotate-id">P2</span>
+                  <span class="annotate-count">7 found</span>
+                  <i class="ti ti-circle-check annotate-status-ok"></i>
+                </div>
+                <div class="annotate-row-detail">5.0' × 5.0' × 1.5' deep</div>
+                <div class="annotate-row-qty">QTY <strong>175</strong> SF</div>
+              </div>
+
+              <!-- P1 -->
+              <div class="annotate-row">
+                <div class="annotate-row-top">
+                  <span class="annotate-swatch" style="background: #556270;"></span>
+                  <span class="annotate-id">P1</span>
+                  <span class="annotate-count">6 found</span>
+                  <i class="ti ti-circle-check annotate-status-ok"></i>
+                </div>
+                <div class="annotate-row-detail">4.0' × 4.0' × 1.5' deep</div>
+                <div class="annotate-row-qty">QTY <strong>96</strong> SF</div>
+              </div>
+
             </div>
           </div>
 
@@ -1350,7 +1520,7 @@
 
     // Preload all group images so Tab swaps are instant
     const preloadedImages = {};
-    ['tmp', 'Group1', 'Group2', 'Group3'].forEach(name => {
+    ['tmp', 'Group1', 'Group2', 'Group3', 'p3', 'p5', 'p6'].forEach(name => {
       const img = new Image();
       img.src = `${name}.png`;
       preloadedImages[name] = img;
@@ -1399,6 +1569,21 @@
       planImage.src = 'tmp.png';
     }
 
+    const annotatePanel = document.getElementById('annotate-panel');
+
+    function openAnnotatePanel() {
+      annotatePanel.style.display = 'flex';
+      annotatePanel.style.flexDirection = 'column';
+      closeReviewCard();
+      closeChat();
+    }
+
+    function closeAnnotatePanel() {
+      annotatePanel.style.display = 'none';
+      const annotateBtn = Array.from(aiToolbarBtns).find(b => b.textContent.trim().includes('Auto-annotate'));
+      if (annotateBtn) annotateBtn.classList.remove('active');
+    }
+
     const detectTooltip = document.getElementById('detect-tooltip');
     let tooltipTimer = null;
 
@@ -1410,6 +1595,21 @@
       detectTooltip.style.display = 'none';
       clearTimeout(tooltipTimer);
     }
+
+    // Annotate row hover — ghost image + tooltip
+    const annotateTooltip = document.getElementById('annotate-tooltip');
+
+    document.querySelectorAll('.annotate-row').forEach(row => {
+      row.addEventListener('mouseenter', () => {
+        const img = row.dataset.image;
+        if (img) planImage.src = img;
+        annotateTooltip.style.display = 'block';
+      });
+      row.addEventListener('mouseleave', () => {
+        planImage.src = 'tmp.png';
+        annotateTooltip.style.display = 'none';
+      });
+    });
 
     function openReviewCard(item) {
       const colorBox = item.querySelector('.color-box');
@@ -1457,11 +1657,13 @@
       btn.addEventListener('click', () => {
         const isAskPlan = btn.textContent.trim().includes('Ask the plan');
         const isDetect = btn.textContent.trim().includes('Detect elements');
+        const isAnnotate = btn.textContent.trim().includes('Auto-annotate');
 
         if (btn.classList.contains('active')) {
           btn.classList.remove('active');
           if (isAskPlan) closeChat();
           if (isDetect) closeReviewCard();
+          if (isAnnotate) closeAnnotatePanel();
         } else {
           aiToolbarBtns.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
@@ -1473,14 +1675,18 @@
           }
 
           if (isDetect) {
+            closeAnnotatePanel();
             const selectedItem = Array.from(treeItems).find(i => i.classList.contains('selected'));
             if (selectedItem) {
               openReviewCard(selectedItem);
             } else {
               showDetectTooltip();
             }
+          } else if (isAnnotate) {
+            openAnnotatePanel();
           } else {
             closeReviewCard();
+            closeAnnotatePanel();
           }
         }
       });
