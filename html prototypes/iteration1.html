@@ -6,8 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>eTakeoff Dimension Mockup</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <!-- ============================================================ -->
+  <!-- STYLES -->
+  <!-- ============================================================ -->
   <style>
-    /* Reset and general styles */
+    /* ---- Reset ---- */
     *,
     *::before,
     *::after {
@@ -26,13 +29,139 @@
       overflow: hidden;
     }
 
+    /* ---- Layout ---- */
     #app {
       display: flex;
       flex-direction: column;
       height: 100vh;
     }
 
-    /* Title bar */
+    /* Layer List — light sub-panel style */
+    #layer-list-panel {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      background: white;
+    }
+
+    .ll-search {
+      padding: 4px 6px;
+      border-bottom: 0.5px solid #ccc;
+      background: #f8f8f8;
+    }
+
+    .ll-search-inner {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: white;
+      border: 0.5px solid #ccc;
+      border-radius: 3px;
+      padding: 3px 6px;
+    }
+
+    .ll-search-inner i {
+      font-size: 11px;
+      color: #aaa;
+      flex-shrink: 0;
+    }
+
+    .ll-search-inner input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #333;
+      font-size: 11px;
+      font-family: inherit;
+      width: 100%;
+    }
+
+    .ll-search-inner input::placeholder {
+      color: #bbb;
+    }
+
+    .layer-list-body {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 11px;
+    }
+
+    .ll-category-label {
+      padding: 5px 6px 2px;
+      font-size: 9px;
+      font-weight: bold;
+      letter-spacing: 0.8px;
+      color: #aaa;
+      text-transform: uppercase;
+      background: #f8f8f8;
+      border-bottom: 0.5px solid #eee;
+    }
+
+    .ll-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 6px;
+      cursor: pointer;
+      border-left: 2px solid transparent;
+    }
+
+    .ll-item:hover {
+      background: #f0f0f0;
+    }
+
+    .ll-item.ll-active {
+      background: #fff8ec;
+      border-left-color: #F5A623;
+    }
+
+    .ll-item.ll-hidden {
+      opacity: 0.4;
+    }
+
+    .ll-eye {
+      font-size: 11px;
+      color: #ccc;
+      flex-shrink: 0;
+      width: 13px;
+      text-align: center;
+    }
+
+    .ll-item.ll-active .ll-eye {
+      color: #F5A623;
+    }
+
+    .ll-item:hover .ll-eye {
+      color: #999;
+    }
+
+    .ll-swatch {
+      width: 11px;
+      height: 11px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .ll-label {
+      color: #333;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .ll-item.ll-bold .ll-label {
+      font-weight: bold;
+    }
+
+    .ll-item.ll-active .ll-label {
+      color: #222;
+    }
+
+    .ll-item.ll-hidden .ll-label {
+      color: #aaa;
+    }
+
+    /* ---- Titlebar ---- */
     #titlebar {
       position: relative;
       height: 44px;
@@ -71,6 +200,7 @@
       font-style: italic;
     }
 
+    /* ---- Menubar ---- */
     #menubar {
       height: 28px;
       background: #2c2c2c;
@@ -90,10 +220,10 @@
       text-decoration: underline;
     }
 
-    /* Ribbon Content */
+    /* ---- Ribbon ---- */
     #ribbon-content {
       background: #f5f6f7;
-      border-bottom: 1px solid #99a;
+      border-bottom: 0.5px solid #99a;
       display: flex;
       padding: 4px 2px 2px 2px;
       height: 85px;
@@ -102,7 +232,7 @@
     .ribbon-group {
       display: flex;
       flex-direction: column;
-      border-right: 1px solid #cccccc;
+      border-right: 0.5px solid #cccccc;
       padding: 0 4px;
       position: relative;
     }
@@ -130,7 +260,7 @@
       align-items: center;
       justify-content: flex-start;
       padding: 4px;
-      border: 1px solid transparent;
+      border: 0.5px solid transparent;
       border-radius: 2px;
       cursor: pointer;
       color: #333;
@@ -214,7 +344,7 @@
     }
 
     .rb-select {
-      border: 1px solid #cccccc;
+      border: 0.5px solid #cccccc;
       background: white;
       padding: 0 4px;
       font-size: 11px;
@@ -227,7 +357,7 @@
     }
 
     .rb-native-select {
-      border: 1px solid #cccccc;
+      border: 0.5px solid #cccccc;
       background: white;
       font-size: 11px;
       width: 140px;
@@ -245,7 +375,7 @@
     .nav-btn {
       width: 20px;
       height: 20px;
-      border: 1px solid #cccccc;
+      border: 0.5px solid #cccccc;
       background: white;
       cursor: pointer;
       display: flex;
@@ -259,7 +389,246 @@
       color: #333;
     }
 
-    /* Main Area */
+    /* Tab Bar */
+    #center-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    #tab-bar {
+      height: 30px;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+      gap: 2px;
+      border-bottom: 1px solid #ccc;
+      flex-shrink: 0;
+    }
+
+    .doc-tab {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0 8px 0 8px;
+      height: 22px;
+      background: #c8c8c8;
+      border: 0.5px solid #b0b0b0;
+      border-radius: 3px;
+      cursor: pointer;
+      color: #333;
+      max-width: 210px;
+      min-width: 80px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .doc-tab:hover {
+      background: #bebebe;
+    }
+
+    .doc-tab.active {
+      background: #e8e8e8;
+      border-color: #999;
+      color: #111;
+    }
+
+    .doc-tab-icon {
+      font-size: 11px !important;
+      flex-shrink: 0;
+      width: auto !important;
+    }
+
+    .doc-tab span {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .doc-tab-close {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+      border-radius: 3px;
+      color: inherit;
+      opacity: 0;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .doc-tab:hover .doc-tab-close,
+    .doc-tab.active .doc-tab-close {
+      opacity: 0.5;
+    }
+
+    .doc-tab-close:hover {
+      background: rgba(128, 128, 128, 0.25);
+      opacity: 1 !important;
+    }
+
+    .doc-tab-close i {
+      font-size: 10px !important;
+      width: auto !important;
+    }
+
+    .doc-tab-add {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #777;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-left: 2px;
+      align-self: center;
+      margin-bottom: 1px;
+    }
+
+    .doc-tab-add:hover {
+      background: #444;
+      color: #ccc;
+    }
+
+    .doc-tab-add i {
+      font-size: 13px !important;
+      width: auto !important;
+    }
+
+    .split-view-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-family: inherit;
+      color: #333;
+      cursor: pointer;
+      white-space: nowrap;
+      height: 24px;
+      margin-right: 4px;
+    }
+
+    .split-view-btn:hover {
+      background: #e8e8e8;
+      border-color: #aaa;
+    }
+
+    .split-view-btn.active {
+      background: #d0d0d0;
+      border-color: #888;
+    }
+
+    .split-view-btn i {
+      font-size: 14px !important;
+      width: auto !important;
+    }
+
+    /* ---- Split View ---- */
+    #plan-area {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    #center-panel-2 {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      background: #e0e0e0;
+      border: 0.5px solid #99a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .split-divider {
+      width: 8px;
+      background: #c8c8c8;
+      border-left: 1px solid #aaa;
+      border-right: 1px solid #aaa;
+      cursor: col-resize;
+      flex-shrink: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .split-divider-handle {
+      width: 2px;
+      height: 16px;
+      background: #999;
+      border-radius: 1px;
+    }
+
+    #center-panel-2 {
+      display: none;
+    }
+
+    /* Tab bar split layout */
+    #tab-group-left {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    #tab-right-area {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
+      border-left: 1px solid transparent;
+      padding-left: 2px;
+    }
+
+    #tab-right-area #split-view-btn {
+      margin-left: auto;
+    }
+
+    #tab-group-right {
+      display: none;
+      align-items: center;
+      gap: 2px;
+      min-width: 0;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    /* Split active state */
+    #center-column.split #center-panel-2 { display: flex; }
+    #center-column.split .split-divider { display: flex; }
+    #center-column.split #tab-group-right { display: flex; }
+
+    /* In split mode: make left and right halves equal width */
+    #center-column.split #tab-group-left { flex: 1; }
+    #center-column.split #tab-right-area {
+      flex: 1;
+      border-left: 1px solid #bbb;
+    }
+
+    /* ---- Panels ---- */
     #main-area {
       flex: 1;
       display: flex;
@@ -269,12 +638,11 @@
       gap: 2px;
     }
 
-    /* Panels */
     .panel {
       display: flex;
       flex-direction: column;
       background: white;
-      border: 1px solid #99a;
+      border: 0.5px solid #99a;
     }
 
     .panel-header {
@@ -285,7 +653,7 @@
       padding: 0 6px;
       font-weight: bold;
       font-size: 12px;
-      border-bottom: 1px solid #99a;
+      border-bottom: 0.5px solid #99a;
     }
 
     .panel-header i {
@@ -310,30 +678,77 @@
       display: flex;
       flex-direction: column;
       gap: 2px;
+      overflow-y: auto;
+      flex-shrink: 0;
     }
 
     .sub-panel {
       flex: 1;
       display: flex;
       flex-direction: column;
-      border: 1px solid #99a;
+      border: 0.5px solid #99a;
       background: white;
       min-height: 0;
     }
 
     .sub-panel-header {
       background: #f0f0f0;
-      padding: 4px 6px;
+      padding: 4px 6px 4px 16px;
       font-size: 11px;
-      font-weight: bold;
-      border-bottom: 1px solid #ccc;
+      font-weight: semibold;
       color: #333;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      cursor: pointer;
+      user-select: none;
     }
 
-    /* Tree View */
+    .sub-panel-header {
+      position: relative;
+    }
+
+    .sub-panel-chevron {
+      position: absolute;
+      left: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0;
+      font-size: 10px !important;
+      width: auto !important;
+      color: #888;
+      transition: opacity 0.1s ease, transform 0.15s ease;
+      pointer-events: none;
+    }
+
+    .sub-panel-header:hover .sub-panel-chevron {
+      opacity: 1;
+    }
+
+    .sub-panel.collapsed .sub-panel-chevron,
+    #layer-list-panel.collapsed .sub-panel-chevron {
+      opacity: 1;
+      transform: translateY(-50%) rotate(90deg);
+    }
+
+    .sub-panel.collapsed>*:not(.sub-panel-header),
+    #layer-list-panel.collapsed>*:not(.sub-panel-header) {
+      display: none !important;
+    }
+
+    .sub-panel.collapsed,
+    #layer-list-panel.collapsed {
+      flex: none !important;
+      min-height: 0 !important;
+    }
+
+    .panel:has(.sub-panel.collapsed),
+    .panel:has(#layer-list-panel.collapsed) {
+      min-height: 0 !important;
+      flex: none !important;
+    }
+
+    /* ---- Tree view ---- */
     .tree-view {
       flex: 1;
       overflow-y: auto;
@@ -368,7 +783,7 @@
     .tree-item i.ti-minus {
       font-size: 10px;
       color: #666;
-      border: 1px solid #aaa;
+      border: 0.5px solid #aaa;
       border-radius: 2px;
       width: 10px;
       height: 10px;
@@ -388,13 +803,13 @@
       height: 12px;
       display: inline-block;
       margin-right: 4px;
-      border: 1px solid #999;
+      border: 0.5px solid #999;
     }
 
-    /* Angle Radio buttons */
+    /* ---- Drawing list ---- */
     .angle-options {
       padding: 4px;
-      border-top: 1px solid #ccc;
+      border-top: 0.5px solid #ccc;
       background: #fafafa;
       display: flex;
       gap: 8px;
@@ -408,7 +823,6 @@
       gap: 2px;
     }
 
-    /* Drawing List */
     .drawing-list {
       flex: 1;
       overflow-y: auto;
@@ -421,7 +835,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      border-bottom: 1px solid #eee;
+      border-bottom: 0.5px solid #eee;
     }
 
     .drawing-item:hover {
@@ -432,7 +846,7 @@
       background: #ccc;
     }
 
-    /* Center Panel (Plan) */
+    /* ---- Plan viewer ---- */
     #center-panel {
       flex: 1;
       background: #e0e0e0;
@@ -441,14 +855,15 @@
       justify-content: center;
       position: relative;
       overflow: hidden;
-      border: 1px solid #99a;
+      border: 0.5px solid #99a;
+      min-height: 0;
     }
 
     .plan-canvas {
       background: white;
       width: 80%;
       height: 90%;
-      border: 1px dashed #666;
+      border: 0.5px dashed #666;
       position: relative;
     }
 
@@ -477,12 +892,12 @@
       width: 6px;
       height: 6px;
       background: #cccccc;
-      border: 1px solid #333;
+      border: 0.5px solid #333;
       border-radius: 50%;
       position: absolute;
     }
 
-    /* Right Panel */
+    /* ---- Right panel ---- */
     #right-panel {
       width: 280px;
       display: flex;
@@ -499,8 +914,8 @@
 
     .data-table th {
       background: #f0f0f0;
-      border-bottom: 1px solid #ccc;
-      border-right: 1px solid #ccc;
+      border-bottom: 0.5px solid #ccc;
+      border-right: 0.5px solid #ccc;
       padding: 3px 6px;
       text-align: left;
       font-weight: normal;
@@ -508,8 +923,8 @@
     }
 
     .data-table td {
-      border-bottom: 1px solid #eee;
-      border-right: 1px solid #eee;
+      border-bottom: 0.5px solid #eee;
+      border-right: 0.5px solid #eee;
       padding: 3px 6px;
     }
 
@@ -521,10 +936,10 @@
       background: #ccc;
     }
 
-    /* Annotate panel rows */
+    /* ---- Annotations ---- */
     .annotate-row {
       padding: 8px 10px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 0.5px solid #eee;
     }
 
     .annotate-row:hover {
@@ -589,10 +1004,13 @@
       color: #333;
     }
 
+    /* ---- Review card ---- */
+
+    /* ---- Status bar ---- */
     #statusbar {
       height: 22px;
       background: #f0f0f0;
-      border-top: 1px solid #ccc;
+      border-top: 0.5px solid #ccc;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -608,7 +1026,7 @@
       color: #555;
     }
 
-    /* AI UI Additions */
+    /* ---- AI toolbar ---- */
     .ai-floating-toolbar {
       position: absolute;
       bottom: 44px;
@@ -620,7 +1038,7 @@
       align-items: center;
       gap: 4px;
       border-radius: 12px;
-      border: 1px solid #444444;
+      border: 0.5px solid #444444;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       z-index: 100;
     }
@@ -668,19 +1086,16 @@
       cursor: pointer;
       font-size: 12px;
       white-space: nowrap;
-      border-radius: 6px;
-      margin-right: 8px;
+      border-radius: 10px;
     }
 
     .menu-selected {
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px;
       color: #000000;
       background-color: #F5F6F7;
       padding: 10px;
     }
 
-    /* AI Chat Panel */
+    /* ---- Chat panel ---- */
     #ai-chat-panel {
       width: 0;
       min-width: 0;
@@ -688,7 +1103,7 @@
       display: flex;
       flex-direction: column;
       background: #1e1e1e;
-      border-left: 1px solid #333;
+      border-left: 0.5px solid #333;
       transition: width 0.25s ease, min-width 0.25s ease;
     }
 
@@ -704,7 +1119,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 12px;
-      border-bottom: 1px solid #333;
+      border-bottom: 0.5px solid #333;
       background: #252525;
     }
 
@@ -777,7 +1192,7 @@
 
     .chat-input-area {
       padding: 12px;
-      border-top: 1px solid #333;
+      border-top: 0.5px solid #333;
       display: flex;
       gap: 8px;
       background: #252525;
@@ -786,7 +1201,7 @@
     .chat-input-area input {
       flex: 1;
       background: #1e1e1e;
-      border: 1px solid #444;
+      border: 0.5px solid #444;
       border-radius: 8px;
       padding: 10px 14px;
       color: #e0e0e0;
@@ -842,7 +1257,7 @@
       font-size: 12px;
     }
 
-    /* Modal Styles */
+    /* ---- Modal ---- */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -872,7 +1287,7 @@
     .modal-header {
       padding: 8px 12px;
       background: #f0f0f0;
-      border-bottom: 1px solid #ccc;
+      border-bottom: 0.5px solid #ccc;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -902,7 +1317,7 @@
 
     .modal-footer {
       padding: 8px 12px;
-      border-top: 1px solid #ccc;
+      border-top: 0.5px solid #ccc;
       display: flex;
       justify-content: flex-end;
       gap: 8px;
@@ -910,7 +1325,7 @@
 
     .btn {
       padding: 6px 16px;
-      border: 1px solid #ccc;
+      border: 0.5px solid #ccc;
       background: #f5f5f5;
       cursor: pointer;
       border-radius: 4px;
@@ -935,27 +1350,45 @@
 
 <body>
   <div id="app">
+
+    <!-- ============================================================ -->
+    <!-- TITLEBAR -->
+    <!-- ============================================================ -->
     <div id="titlebar">
       <div class="left">
         <img src="logo.png" alt="Rudus" style="height: 22px; margin-right: 4px;">
         <span class="project">SPOC Spruce GMP</span>
       </div>
-      <div class="ai-ask-btn">Ask Rudus.ai</div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div class="ai-ask-btn">Share</div>
+        <div title="Eric Kim" style="
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          background: grey;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 10px;
+          color: white;
+          letter-spacing: 0.5px;
+        ">EK</div>
+      </div>
     </div>
 
+    <!-- ============================================================ -->
+    <!-- MENUBAR -->
+    <!-- ============================================================ -->
     <div id="menubar">
-      <span>File</span>
       <span class="menu-selected">Home</span>
-      <span>View</span>
-      <span>Drawing</span>
-      <span>Annotate</span>
+      <span>Summary</span>
+      <span>Estimate</span>
       <span>Settings</span>
-      <span>Planroom</span>
-      <span>Work Zones</span>
-      <span>Trial</span>
     </div>
 
-    <!-- Ribbon Content -->
+    <!-- ============================================================ -->
+    <!-- RIBBON -->
+    <!-- ============================================================ -->
     <div id="ribbon-content">
       <!-- Project -->
       <div class="ribbon-group">
@@ -995,6 +1428,8 @@
               <button id="zoom-out-btn" class="nav-btn" style="margin-left: 4px;"><i
                   class="ti ti-zoom-out"></i></button>
               <button id="zoom-in-btn" class="nav-btn"><i class="ti ti-zoom-in"></i></button>
+              <button id="rotate-btn" class="nav-btn" style="margin-left: 4px;" title="Rotate"><i
+                  class="ti ti-rotate-clockwise"></i></button>
             </div>
           </div>
         </div>
@@ -1083,69 +1518,16 @@
 
     <!-- Main Area -->
     <div id="main-area">
-      <!-- Left Panel -->
-      <div id="left-panel">
-        <div class="panel" style="flex: 2;">
-          <div class="panel-header orange">
-            <span>Control Panel 1</span>
-            <div><i class="ti ti-pin"></i> <i class="ti ti-chevron-down"></i> <i class="ti ti-x"></i></div>
-          </div>
-          <div class="sub-panel">
-            <div class="sub-panel-header">
-              <span>Traces (Double-click to measure)</span>
-              <div><i class="ti ti-filter"></i> <i class="ti ti-settings"></i></div>
-            </div>
 
-            <div class="tree-view">
-              <div class="tree-item"><i class="ti ti-minus"></i> <i class="ti ti-folder icon-yellow"></i> Footings</div>
-              <div style="padding-left: 16px;">
-                <div class="tree-item"><span class="color-box"
-                    style="background: #E8A030; width: 10px; height: 10px; border-radius: 1px;"></span> Footing -
-                  Continuous (1.0' x 1.5') - F1</div>
-                <div class="tree-item"><span class="color-box"
-                    style="background: #4ECDC4; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Grade
-                  Bm (6.0' x 4.0') - GB3</div>
-                <div class="tree-item"><span class="color-box"
-                    style="background: #FF6B6B; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Grade
-                  Bm (4.0' x 4.0') - GB2</div>
-                <div class="tree-item"><span class="color-box"
-                    style="background: #C7F464; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Grade
-                  Bm (4.0' x 4.0') - GB1</div>
-                <div class="tree-item"><span class="color-box"
-                    style="background: #556270; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
-                  (4.0' x 4.0' x 1.5') - P1</div>
-                <div class="tree-item"><span class="color-box"
-                    style="background: #C44D58; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
-                  (5.0' x 5.0' x 1.5') - P2</div>
-                <div class="tree-item"><span class="color-box"
-                    style="background: #4A90E2; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
-                  (6.0' x 6.0' x 1.5') - P3</div>
-                <div class="tree-item"><span class="color-box"
-                    style="background: #50E3C2; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
-                  (7.0' x 7.0' x 1.5') - P4</div>
-                <div class="tree-item"><span class="color-box"
-                    style="background: #B8E986; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
-                  (8.0' x 8.0' x 1.5') - P5</div>
-                <div class="tree-item"><span class="color-box"
-                    style="background: #F5A623; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
-                  (9.0' x 9.0' x 1.5') - P6</div>
-                <div class="tree-item"><span class="color-box"
-                    style="background: #D0021B; width: 10px; height: 10px; border-radius: 1px;"></span> Footing - Spread
-                  (3.0' x 3.0' x 1.5') - P7</div>
-              </div>
-            </div>
-            <div class="angle-options">
-              <label><input type="radio" name="angle" checked> 0</label>
-              <label><input type="radio" name="angle"> 90</label>
-              <label><input type="radio" name="angle"> 180</label>
-              <label><input type="radio" name="angle"> 270</label>
-            </div>
-          </div>
-        </div>
-        <div class="panel" style="flex: 1;">
+      <!-- ============================================================ -->
+      <!-- LEFT PANEL -->
+      <!-- ============================================================ -->
+      <div id="left-panel">
+        <div class="panel" style="flex: none; min-height: 180px;">
           <div class="sub-panel">
             <div class="sub-panel-header">
-              <span>Drawing List</span>
+              <i class="ti ti-chevron-right sub-panel-chevron"></i>
+              <span>Pages</span>
               <label style="font-weight: normal; font-size: 10px; display: flex; align-items: center; gap: 2px;"><input
                   type="checkbox" checked> All Pages</label>
             </div>
@@ -1156,7 +1538,7 @@
               <div class="drawing-item">3 A2.27 - Enlarged Stair Plans & Details - ...</div>
               <div class="drawing-item">4 E-2 - FIRST FLOOR POWER PLAN</div>
               <div class="drawing-item">5 E-2.1 - SECOND FLOOR ELEC PLAN</div>
-              <div class="drawing-item selected" style="font-weight:bold;">6 S1.0 - TYPICAL NOTES</div>
+              <div class="drawing-item" style="font-weight:bold;">6 S1.0 - TYPICAL NOTES</div>
               <div class="drawing-item">7 S1.1 - TYPICAL DETAILS</div>
               <div class="drawing-item">8 S1.2 - TYPICAL DETAILS</div>
               <div class="drawing-item" style="font-weight:bold;">9 S1.3 - TYPICAL DETAILS</div>
@@ -1167,13 +1549,175 @@
             </div>
           </div>
         </div>
+        <div class="panel" style="flex: none; min-height: 300px;">
+          <div class="sub-panel">
+            <div class="sub-panel-header">
+              <i class="ti ti-chevron-right sub-panel-chevron"></i>
+              <span>Traces (Double-click to measure)</span>
+            </div>
+            <div class="tree-view">
+              <div class="tree-item"><i class="ti ti-minus"></i> <i class="ti ti-folder icon-yellow"></i> Footings</div>
+              <div style="padding-left: 16px;">
+                <div class="tree-item"><span class="color-box"
+                    style="background: #E8A030; width: 10px; height: 10px; border-radius: 0.5px;"></span> Footing -
+                  Continuous (1.0' x 1.5') - F1</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #4ECDC4; width: 10px; height: 10px; border-radius: 0.5px;"></span> Footing -
+                  Grade
+                  Bm (6.0' x 4.0') - GB3</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #FF6B6B; width: 10px; height: 10px; border-radius: 0.5px;"></span> Footing -
+                  Grade
+                  Bm (4.0' x 4.0') - GB2</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #C7F464; width: 10px; height: 10px; border-radius: 0.5px;"></span> Footing -
+                  Grade
+                  Bm (4.0' x 4.0') - GB1</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #556270; width: 10px; height: 10px; border-radius: 0.5px;"></span> Footing -
+                  Spread
+                  (4.0' x 4.0' x 1.5') - P1</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #C44D58; width: 10px; height: 10px; border-radius: 0.5px;"></span> Footing -
+                  Spread
+                  (5.0' x 5.0' x 1.5') - P2</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #4A90E2; width: 10px; height: 10px; border-radius: 0.5px;"></span> Footing -
+                  Spread
+                  (6.0' x 6.0' x 1.5') - P3</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #50E3C2; width: 10px; height: 10px; border-radius: 0.5px;"></span> Footing -
+                  Spread
+                  (7.0' x 7.0' x 1.5') - P4</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #B8E986; width: 10px; height: 10px; border-radius: 0.5px;"></span> Footing -
+                  Spread
+                  (8.0' x 8.0' x 1.5') - P5</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #F5A623; width: 10px; height: 10px; border-radius: 0.5px;"></span> Footing -
+                  Spread
+                  (9.0' x 9.0' x 1.5') - P6</div>
+                <div class="tree-item"><span class="color-box"
+                    style="background: #D0021B; width: 10px; height: 10px; border-radius: 0.5px;"></span> Footing -
+                  Spread
+                  (3.0' x 3.0' x 1.5') - P7</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Layer List -->
+        <div class="panel" style="flex: none; min-height: 400px;">
+          <div id="layer-list-panel">
+            <div class="sub-panel-header">
+              <i class="ti ti-chevron-right sub-panel-chevron"></i>
+              <span>Layers</span>
+            </div>
+            <div class="ll-search">
+              <div class="ll-search-inner">
+                <i class="ti ti-search"></i>
+                <input type="text" placeholder="Search layers...">
+              </div>
+            </div>
+            <div class="layer-list-body">
+              <div class="ll-category-label">Specialty</div>
+              <div class="ll-item"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#5b9bd5;"></span><span class="ll-label">10101 Storm Trap Slab</span></div>
+              <div class="ll-item ll-bold"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#70ad47;"></span><span class="ll-label">10201 Curbs</span></div>
+              <div class="ll-item ll-bold ll-active"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#F5A623;"></span><span class="ll-label">2101 Spread Footings</span></div>
+              <div class="ll-item"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#E8A030;"></span><span class="ll-label">2102 Cont. Footings</span></div>
+              <div class="ll-item"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#4ECDC4;"></span><span class="ll-label">2103 Trenched Footings</span></div>
+              <div class="ll-item"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#C7F464;"></span><span class="ll-label">2201 Mat Fons</span></div>
+              <div class="ll-item ll-hidden"><i class="ti ti-eye-off ll-eye"></i><span class="ll-swatch"
+                  style="background:#777;"></span><span class="ll-label">2201 Mud Slabs</span></div>
+              <div class="ll-item"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#4A90E2;"></span><span class="ll-label">2401 Grade Beams</span></div>
+              <div class="ll-item"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#B8E986;"></span><span class="ll-label">2500_PC Paving Assy</span></div>
+              <div class="ll-item"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#D0021B;"></span><span class="ll-label">3000 PC_Conc Assy</span></div>
+              <div class="ll-item ll-bold"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#C44D58;"></span><span class="ll-label">3101 Concrete Columns</span></div>
+              <div class="ll-item"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#50E3C2;"></span><span class="ll-label">3201 Concrete Walls</span></div>
+              <div class="ll-item"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#888;"></span><span class="ll-label">3301 Piers</span></div>
+              <div class="ll-item"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#aaa;"></span><span class="ll-label">3401 Bolt Settings</span></div>
+              <div class="ll-item"><i class="ti ti-eye ll-eye"></i><span class="ll-swatch"
+                  style="background:#ddd; border:1px solid #555;"></span><span class="ll-label">3501 Wall
+                  Insulation</span></div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Center Panel -->
-      <div id="center-panel">
-        <!-- Mock content to represent the drawing and takeoff -->
-        <img id="plan-image" src="tmp.png" alt="Plan"
-          style="width: 100%; height: 100%; object-fit: contain; opacity: 0.8; pointer-events: none; transition: transform 0.2s ease; transform-origin: center;">
+      <!-- ============================================================ -->
+      <!-- CENTER — PLAN VIEWER -->
+      <!-- ============================================================ -->
+      <div id="center-column">
+        <!-- Tab Bar -->
+        <div id="tab-bar">
+          <!-- Left tab group (flex: 1, occupies left half in split mode) -->
+          <div id="tab-group-left">
+            <div class="doc-tab active">
+              <i class="ti ti-file-description doc-tab-icon"></i>
+              <span>S2.0 - Foundation Plan</span>
+              <button class="doc-tab-close"><i class="ti ti-x"></i></button>
+            </div>
+            <div class="doc-tab">
+              <i class="ti ti-file-description doc-tab-icon"></i>
+              <span>S2.1 - Dimensioned Fdn</span>
+              <button class="doc-tab-close"><i class="ti ti-x"></i></button>
+            </div>
+            <div class="doc-tab">
+              <i class="ti ti-file-description doc-tab-icon"></i>
+              <span>S1.1 - Typical Details</span>
+              <button class="doc-tab-close"><i class="ti ti-x"></i></button>
+            </div>
+            <button class="doc-tab-add"><i class="ti ti-plus"></i></button>
+          </div>
+          <!-- Right area (flex: 1, always visible — contains right tabs in split mode + split btn) -->
+          <div id="tab-right-area">
+            <!-- Right tab group: only shown in split mode -->
+            <div id="tab-group-right">
+              <div class="doc-tab active">
+                <i class="ti ti-file-description doc-tab-icon"></i>
+                <span>S2.0 - Foundation Plan</span>
+                <button class="doc-tab-close"><i class="ti ti-x"></i></button>
+              </div>
+            </div>
+            <!-- Split view button: always at far right -->
+            <button id="split-view-btn" class="split-view-btn">
+              <i class="ti ti-layout-columns"></i>
+              Split View
+            </button>
+          </div>
+        </div>
+
+        <!-- Plan area: holds one or two plan panes -->
+        <div id="plan-area">
+          <div id="center-panel">
+            <!-- Mock content to represent the drawing and takeoff -->
+            <img id="plan-image" src="tmp.png" alt="Plan"
+              style="width: 100%; height: 100%; object-fit: contain; opacity: 0.8; pointer-events: none; transition: transform 0.2s ease; transform-origin: center;">
+          </div>
+          <div class="split-divider">
+            <div class="split-divider-handle"></div>
+            <div class="split-divider-handle"></div>
+            <div class="split-divider-handle"></div>
+          </div>
+          <div id="center-panel-2">
+            <img src="tmp.png" alt="Plan 2"
+              style="width: 100%; height: 100%; object-fit: contain; opacity: 0.8; pointer-events: none;">
+          </div>
+        </div>
       </div>
 
       <!-- Detect elements help tooltip -->
@@ -1188,7 +1732,7 @@
         font-size: 12px;
         padding: 8px 14px;
         border-radius: 8px;
-        border: 1px solid #444;
+        border: 0.5px solid #444;
         white-space: nowrap;
         box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         z-index: 101;
@@ -1219,7 +1763,7 @@
         font-size: 12px;
         padding: 8px 14px;
         border-radius: 8px;
-        border: 1px solid #444;
+        border: 0.5px solid #444;
         white-space: nowrap;
         box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         z-index: 101;
@@ -1245,21 +1789,19 @@
         <div class="ai-toolbar-btn"><i class="ti ti-message-circle"></i> Ask the plan</div>
       </div>
 
-      <!-- Right Panel -->
+      <!-- ============================================================ -->
+      <!-- RIGHT PANEL -->
+      <!-- ============================================================ -->
       <div id="right-panel">
         <div class="panel" style="flex: 1; overflow-y: auto;">
-          <div class="panel-header blue">
-            <span>Control Panel 2</span>
-            <div><i class="ti ti-pin"></i> <i class="ti ti-chevron-down"></i> <i class="ti ti-x"></i></div>
-          </div>
-
           <div id="ai-review-card" class="sub-panel" style="display: none; background: #111; flex: none;">
-            <div class="sub-panel-header" style="background: white; color: black; border-bottom: 1px solid #ccc;">
+            <div class="sub-panel-header" style="background: white; color: black; border-bottom: 0.5px solid #ccc;">
+              <i class="ti ti-chevron-right sub-panel-chevron"></i>
               <span><i class="ti ti-circle-filled" id="review-status-color"
                   style="color: #4ECDC4; font-size: 10px;"></i> Detect Elements</span>
             </div>
             <div
-              style="background-color: #1A1A1A; color: #FFFFFF; padding: 16px; margin: 0; border-bottom: 1px solid #444;">
+              style="background-color: #1A1A1A; color: #FFFFFF; padding: 16px; margin: 0; border-bottom: 0.5px solid #444;">
               <!-- Top Row -->
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                 <div style="font-size: 20px; font-weight: bold;">
@@ -1291,19 +1833,19 @@
               <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px;">
                 <div style="display: flex; gap: 12px; align-items: center;">
                   <div
-                    style="background: #2A2A2A; border-radius: 4px; padding: 4px 12px; font-size: 12px; color: #888; min-width: 60px; text-align: center; border: 1px solid #333;">
+                    style="background: #2A2A2A; border-radius: 4px; padding: 4px 12px; font-size: 12px; color: #888; min-width: 60px; text-align: center; border: 0.5px solid #333;">
                     Tab</div>
                   <div style="color: #666; font-size: 12px;">accept</div>
                 </div>
                 <div style="display: flex; gap: 12px; align-items: center;">
                   <div
-                    style="background: #2A2A2A; border-radius: 4px; padding: 4px 12px; font-size: 12px; color: #888; min-width: 60px; text-align: center; border: 1px solid #333;">
+                    style="background: #2A2A2A; border-radius: 4px; padding: 4px 12px; font-size: 12px; color: #888; min-width: 60px; text-align: center; border: 0.5px solid #333;">
                     X</div>
                   <div style="color: #666; font-size: 12px;">skip</div>
                 </div>
                 <div style="display: flex; gap: 12px; align-items: center;">
                   <div
-                    style="background: #2A2A2A; border-radius: 4px; padding: 4px 12px; font-size: 12px; color: #888; min-width: 60px; text-align: center; border: 1px solid #333;">
+                    style="background: #2A2A2A; border-radius: 4px; padding: 4px 12px; font-size: 12px; color: #888; min-width: 60px; text-align: center; border: 0.5px solid #333;">
                     Ctrl + Tab</div>
                   <div style="color: #666; font-size: 12px;">accept rest</div>
                 </div>
@@ -1311,7 +1853,7 @@
 
               <!-- Footer -->
               <div
-                style="display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top:x 12px; font-size: 11px; color: #666;">
+                style="display: flex; justify-content: space-between; border-top: 0.5px solid #333; padding-top: 12px; font-size: 11px; color: #666;">
                 <div id="review-footer-name">Footings - Length</div>
                 <div>Sheet S2.0</div>
               </div>
@@ -1322,9 +1864,31 @@
           <div id="annotate-panel" class="sub-panel"
             style="display: none; flex: none; overflow-y: auto; max-height: 340px;">
             <div class="sub-panel-header">
+              <i class="ti ti-chevron-right sub-panel-chevron"></i>
               <span>Annotations</span>
               <span style="font-weight: normal; color: #888; font-size: 11px;">57 total</span>
             </div>
+
+            <!-- Accept all button -->
+            <div style="padding: 8px 10px; border-bottom: 0.5px solid #ddd;">
+              <button id="accept-all-annotations-btn" style="
+                width: 100%;
+                background: #222;
+                color: #fff;
+                border: none;
+                border-radius: 10px;
+                padding: 10px 14px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                cursor: pointer;
+                font-size: 13px;
+                font-family: inherit;
+              ">
+                <span style="flex: 1; text-align: center;">Accept all annotations</span>
+              </button>
+            </div>
+
             <div style="padding: 6px 0;">
 
               <!-- P6 -->
@@ -1392,8 +1956,8 @@
 
           <div class="sub-panel" style="flex: none;">
             <div class="sub-panel-header">
+              <i class="ti ti-chevron-right sub-panel-chevron"></i>
               <span>Quantity List</span>
-              <div><i class="ti ti-settings"></i> <i class="ti ti-dots"></i></div>
             </div>
             <table class="data-table">
               <tr>
@@ -1410,10 +1974,8 @@
 
           <div class="sub-panel">
             <div class="sub-panel-header">
+              <i class="ti ti-chevron-right sub-panel-chevron"></i>
               <span>Measurement Summary</span>
-              <div style="display: flex; gap: 4px; align-items: center;"><label
-                  style="font-weight: normal; display: flex; align-items: center; gap: 2px;"><input type="checkbox"
-                    checked> Sync</label> <i class="ti ti-chevron-up"></i> <i class="ti ti-settings"></i></div>
             </div>
             <table class="data-table">
               <tr>
@@ -1422,11 +1984,8 @@
               </tr>
               <tr>
                 <td><i class="ti ti-minus"></i> <span class="color-box"
-                    style="background: white; border-color:#555; border-width: 2px;"></span> Concrete Forms - Leng</td>
-                <td>12.36 Ft</td>
-              </tr>
-              <tr class="selected">
-                <td style="padding-left: 20px;">Concrete Forms - Leng</td>
+                    style="background: white; border-color:#555; border-width: 2px;"></span> Concrete Forms - Length
+                </td>
                 <td>12.36 Ft</td>
               </tr>
               <tr>
@@ -1439,13 +1998,11 @@
         </div>
       </div>
 
-      <!-- AI Chat Panel -->
+      <!-- ============================================================ -->
+      <!-- CHAT PANEL -->
+      <!-- ============================================================ -->
       <div id="ai-chat-panel">
         <div class="chat-header">
-          <div class="chat-header-title">
-            <i class="ti ti-message-circle"></i>
-            Ask Rudus.ai
-          </div>
           <button class="chat-close-btn" id="chat-close-btn"><i class="ti ti-x"></i></button>
         </div>
         <div class="chat-messages" id="chat-messages">
@@ -1461,14 +2018,12 @@
       </div>
     </div>
 
-    <!-- Status Bar -->
-    <div id="statusbar">
-      <div class="status-left">For Help, press F1</div>
-      <div class="status-right">Primary License/ADVS Active</div>
-    </div>
+
   </div>
 
-  <!-- Custom Scale Modal -->
+  <!-- ============================================================ -->
+  <!-- MODALS -->
+  <!-- ============================================================ -->
   <div id="custom-scale-modal" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-header">
@@ -1479,10 +2034,10 @@
         <p style="margin-bottom: 8px;">Enter your custom scale settings:</p>
         <div style="display: flex; gap: 8px; align-items: center;">
           <input type="text" placeholder="1 inch"
-            style="padding: 6px; width: 100px; border: 1px solid #ccc; border-radius: 4px;" />
+            style="padding: 6px; width: 100px; border: 0.5px solid #ccc; border-radius: 4px;" />
           <span>=</span>
           <input type="text" placeholder="10 ft"
-            style="padding: 6px; width: 100px; border: 1px solid #ccc; border-radius: 4px;" />
+            style="padding: 6px; width: 100px; border: 0.5px solid #ccc; border-radius: 4px;" />
         </div>
       </div>
       <div class="modal-footer">
@@ -1492,8 +2047,11 @@
     </div>
   </div>
 
+  <!-- ============================================================ -->
+  <!-- JAVASCRIPT -->
+  <!-- ============================================================ -->
   <script>
-    // AI Chat Panel logic
+    // ---- DOM refs ----
     const chatPanel = document.getElementById('ai-chat-panel');
     const chatCloseBtn = document.getElementById('chat-close-btn');
     const chatInput = document.getElementById('chat-input');
@@ -1501,11 +2059,9 @@
     const chatMessages = document.getElementById('chat-messages');
     const chatEmpty = document.getElementById('chat-empty');
 
-    // Toolbar buttons logic
     const aiToolbarBtns = document.querySelectorAll('.ai-floating-toolbar .ai-toolbar-btn');
     const treeItems = document.querySelectorAll('.tree-view .tree-item');
 
-    // Review Panel elements
     const reviewCard = document.getElementById('ai-review-card');
     const reviewType = document.getElementById('review-type');
     const reviewId = document.getElementById('review-id');
@@ -1518,6 +2074,7 @@
     const reviewTotalSteps = document.getElementById('review-total-steps');
     const planImage = document.getElementById('plan-image');
 
+    // ---- State ----
     // Preload all group images so Tab swaps are instant
     const preloadedImages = {};
     ['tmp', 'Group1', 'Group2', 'Group3', 'p3', 'p5', 'p6'].forEach(name => {
@@ -1530,6 +2087,7 @@
     let detectionStep = 0;
     let activeColor = '#4ECDC4';
 
+    // ---- Review card ----
     function updateReviewProgress() {
       // Update counter
       reviewCurrentStep.textContent = detectionStep;
@@ -1569,6 +2127,7 @@
       planImage.src = 'tmp.png';
     }
 
+    // ---- Annotations panel ----
     const annotatePanel = document.getElementById('annotate-panel');
 
     function openAnnotatePanel() {
@@ -1653,6 +2212,7 @@
       }
     }
 
+    // ---- AI toolbar ----
     aiToolbarBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         const isAskPlan = btn.textContent.trim().includes('Ask the plan');
@@ -1692,6 +2252,7 @@
       });
     });
 
+    // ---- Chat panel ----
     // "Ask Rudus.ai" button in title bar
     document.querySelector('.ai-ask-btn').addEventListener('click', () => openChat());
 
@@ -1715,7 +2276,7 @@
       if (askBtn) askBtn.classList.remove('active');
     }
 
-    // Attach click listener to Footing traces
+    // ---- Tree items ----
     treeItems.forEach(item => {
       item.addEventListener('click', (e) => {
         // Prevent if clicking on expand icon
@@ -1733,7 +2294,7 @@
       });
     });
 
-    // Keyboard shortcuts for Detect Elements mode
+    // ---- Keyboard shortcuts ----
     document.addEventListener('keydown', (e) => {
       if (reviewCard.style.display !== 'none' && e.key === 'Tab') {
         e.preventDefault();
@@ -1778,7 +2339,7 @@
       if (e.key === 'Enter') sendMessage();
     });
 
-    // Custom Scale Modal Logic
+    // ---- Scale modal ----
     const scaleSelect = document.getElementById('scale-select');
     const customScaleModal = document.getElementById('custom-scale-modal');
     const closeModalBtn = document.getElementById('close-modal-btn');
@@ -1808,27 +2369,59 @@
       customScaleModal.classList.remove('open');
     });
 
-    // Zoom Logic
-    // const zoomInBtn = document.getElementById('zoom-in-btn');
-    // const zoomOutBtn = document.getElementById('zoom-out-btn');
-    // const planImage = document.getElementById('plan-image');
-    // let currentScale = 1;
+    // Split view toggle
+    document.getElementById('split-view-btn').addEventListener('click', () => {
+      const col = document.getElementById('center-column');
+      const btn = document.getElementById('split-view-btn');
+      col.classList.toggle('split');
+      btn.classList.toggle('active');
+    });
 
-    // function applyZoom() {
-    //   planImage.style.transform = `scale(${currentScale})`;
-    // }
+    // Tab bar behavior
+    document.querySelectorAll('.doc-tab').forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        if (e.target.closest('.doc-tab-close')) return;
+        document.querySelectorAll('.doc-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+      tab.querySelector('.doc-tab-close').addEventListener('click', () => {
+        const wasActive = tab.classList.contains('active');
+        tab.remove();
+        if (wasActive) {
+          const remaining = document.querySelector('.doc-tab');
+          if (remaining) remaining.classList.add('active');
+        }
+      });
+    });
 
-    // zoomInBtn.addEventListener("click", () => {
-    //   currentScale += 0.2;
-    //   applyZoom();
-    // });
+    // Sub-panel collapse behavior
+    document.querySelectorAll('.sub-panel-header').forEach(header => {
+      header.addEventListener('click', () => {
+        header.parentElement.classList.toggle('collapsed');
+      });
+    });
 
-    // zoomOutBtn.addEventListener('click', () => {
-    //   if (currentScale > 0.2) {
-    //     currentScale -= 0.2;
-    //     applyZoom();
-    //   }
-    // });
+    // ---- Zoom ----
+    const zoomInBtn = document.getElementById('zoom-in-btn');
+    const zoomOutBtn = document.getElementById('zoom-out-btn');
+    const plnImage = document.getElementById('plan-image');
+    let currentScale = 1;
+
+    function applyZoom() {
+      plnImage.style.transform = `scale(${currentScale})`;
+    }
+
+    zoomInBtn.addEventListener("click", () => {
+      currentScale += 0.2;
+      applyZoom();
+    });
+
+    zoomOutBtn.addEventListener('click', () => {
+      if (currentScale > 0.2) {
+        currentScale -= 0.2;
+        applyZoom();
+      }
+    });
 
   </script>
 </body>
