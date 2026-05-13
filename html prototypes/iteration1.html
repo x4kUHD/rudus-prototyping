@@ -617,12 +617,23 @@
     }
 
     /* Split active state */
-    #center-column.split #center-panel-2 { display: flex; }
-    #center-column.split .split-divider { display: flex; }
-    #center-column.split #tab-group-right { display: flex; }
+    #center-column.split #center-panel-2 {
+      display: flex;
+    }
+
+    #center-column.split .split-divider {
+      display: flex;
+    }
+
+    #center-column.split #tab-group-right {
+      display: flex;
+    }
 
     /* In split mode: make left and right halves equal width */
-    #center-column.split #tab-group-left { flex: 1; }
+    #center-column.split #tab-group-left {
+      flex: 1;
+    }
+
     #center-column.split #tab-right-area {
       flex: 1;
       border-left: 1px solid #bbb;
@@ -1698,6 +1709,10 @@
               <i class="ti ti-layout-columns"></i>
               Split View
             </button>
+            <button id="close-panels-btn" class="split-view-btn">
+              <i class="ti ti-layout-sidebar"></i>
+              Close Panels
+            </button>
           </div>
         </div>
 
@@ -2375,6 +2390,23 @@
       const btn = document.getElementById('split-view-btn');
       col.classList.toggle('split');
       btn.classList.toggle('active');
+    });
+
+    // Close/open panels toggle
+    document.getElementById('close-panels-btn').addEventListener('click', () => {
+      const btn = document.getElementById('close-panels-btn');
+      const leftPanel = document.getElementById('left-panel');
+      const rightPanel = document.getElementById('right-panel');
+      const panelsClosed = leftPanel.style.display === 'none';
+      if (panelsClosed) {
+        leftPanel.style.display = '';
+        rightPanel.style.display = '';
+        btn.innerHTML = '<i class="ti ti-layout-sidebar"></i> Close Panels';
+      } else {
+        leftPanel.style.display = 'none';
+        rightPanel.style.display = 'none';
+        btn.innerHTML = '<i class="ti ti-layout-sidebar"></i> Open Panels';
+      }
     });
 
     // Tab bar behavior
